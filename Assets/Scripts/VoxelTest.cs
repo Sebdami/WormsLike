@@ -8,7 +8,7 @@ public class VoxelTest : MonoBehaviour {
 
     private void Start()
     {
-        map = new VoxelMap(20, 20, 25, 0.25f);
+        map = new VoxelMap(256, 128, 5, 0.25f);
         map.GenerateFilledTerrain();
         mapObject = map.IntantiateMap();
     }

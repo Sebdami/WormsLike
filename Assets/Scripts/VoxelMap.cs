@@ -9,6 +9,11 @@ public class VoxelMap {
     int depth;
     float cubeSize;
 
+    Mesh mapMesh;
+    public List<Vector3> meshVertices = new List<Vector3>();
+    public List<int> meshTriangles = new List<int>();
+    public List<Vector2> meshUV = new List<Vector2>();
+
     public int[][][] VoxelTerrain;
 
     public int Width
@@ -63,6 +68,19 @@ public class VoxelMap {
         }
     }
 
+    public Mesh MapMesh
+    {
+        get
+        {
+            return mapMesh;
+        }
+
+        set
+        {
+            mapMesh = value;
+        }
+    }
+
     public VoxelMap(int _width, int _height, int _depth, float _cubeSize)
     {
         width = _width;
@@ -92,6 +110,44 @@ public class VoxelMap {
                 }
             }
         }
+    }
+
+    Mesh CreateMesh()
+    {
+        if (mapMesh)
+        {
+            GameObject.Destroy(mapMesh);
+        }
+        mapMesh = new Mesh();
+        meshVertices = new List<Vector3>();
+        meshTriangles = new List<int>();
+        meshUV = new List<Vector2>();
+
+
+
+        return mapMesh;
+    }
+
+    void GetCubeVertices(bool )
+    {
+
+    }
+
+
+    Mesh UpdateMesh()
+    {
+        if (!mapMesh)
+        {
+            Debug.LogError("Mesh needs to be created beforehand with CreateMesh()");
+            return null;
+        }
+
+        List<Vector3> vertices = new List<Vector3>();
+        mapMesh.GetVertices(vertices);
+
+        
+
+        return mapMesh;
     }
 
     public GameObject IntantiateMap()
