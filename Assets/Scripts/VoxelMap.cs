@@ -128,11 +128,6 @@ public class VoxelMap {
         return mapMesh;
     }
 
-    void GetCubeVertices(bool )
-    {
-
-    }
-
 
     Mesh UpdateMesh()
     {
