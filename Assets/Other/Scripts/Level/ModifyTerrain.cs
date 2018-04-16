@@ -27,11 +27,11 @@ public class ModifyTerrain : MonoBehaviour {
 			
 		}
 		
-		LoadChunks(GameObject.FindGameObjectWithTag("Player").transform.position,32,48);
+		LoadChunks();
 		
 	}
 	
-	public void LoadChunks(Vector3 playerPos, float distToLoad, float distToUnload){
+	public void LoadChunks(){
 		
 		
 		for(int x=0;x<world.chunks.GetLength(0);x++){
@@ -48,7 +48,7 @@ public class ModifyTerrain : MonoBehaviour {
 	public void ReplaceBlockCenter(float range, byte block){
 		//Replaces the block directly in front of the player
 		
-		Ray ray = new Ray(cameraGO.transform.position, cameraGO.transform.forward);
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
         //Collider[] colliders = Physics.OverlapSphere(transform.position, 5.0f);
         //Debug.Log("oi");
@@ -64,25 +64,23 @@ public class ModifyTerrain : MonoBehaviour {
         if (Physics.Raycast(ray, out hit))
         {
             range *= 2.0f;
-            if (hit.distance < range)
+
+            Vector3 position = hit.point;
+            position += (hit.normal * 0.5f);
+            position.x = Mathf.Round(position.x);
+            position.y = Mathf.Round(position.y);
+            position.z = Mathf.Round(position.z);
+
+            for (int x = (int)(position.x - range); x < (int)(position.x + range); x++)
             {
-                Vector3 position = hit.point;
-                position += (hit.normal * 0.5f);
-                position.x = Mathf.Round(position.x);
-                position.y = Mathf.Round(position.y);
-                position.z = Mathf.Round(position.z);
-
-                for (int x = (int)(position.x - range); x < (int)(position.x + range); x++)
+                for (int y = (int)(position.y - range); y < (int)(position.y + range); y++)
                 {
-                    for (int y = (int)(position.y - range); y < (int)(position.y + range); y++)
+                    for (int z = (int)(position.z - range); z < (int)(position.z + range); z++)
                     {
-                        for (int z = (int)(position.z - range); z < (int)(position.z + range); z++)
-                        {
 
-                            Vector3 newPos = new Vector3(x, y, z);
-                            if (Vector3.Distance(position, newPos) < range/ 2.0f)
-                            SetBlockAt(newPos, block);
-                        }
+                        Vector3 newPos = new Vector3(x, y, z);
+                        if (Vector3.Distance(position, newPos) < range/ 2.0f)
+                        SetBlockAt(newPos, block);
                     }
                 }
             }
