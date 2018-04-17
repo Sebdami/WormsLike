@@ -12,11 +12,12 @@ public class Chunk : MonoBehaviour
     private List<int> newTriangles = new List<int>();
     private List<Vector2> newUV = new List<Vector2>();
 
-    private float tUnit = 0.25f;
-    private Vector2 tStone = new Vector2(0, 0);
-    private Vector2 tGrass = new Vector2(3, 0);
-    private Vector2 tDirt = new Vector2(1, 0);
-    private Vector2 tGrassTop = new Vector2(2, 0);
+    private float tUnitX = 1.0f/11.0f;
+    private float tUnitY = 1.0f / 8.0f;
+    private Vector2 tStone = new Vector2(1, 3);
+    private Vector2 tGrass = new Vector2(1, 6);
+    private Vector2 tDirt = new Vector2(1, 3);
+    private Vector2 tGrassTop = new Vector2(1, 6);
     private Vector2 tWater = new Vector2(0, 1);
 
     private Mesh mesh;
@@ -275,10 +276,10 @@ public class Chunk : MonoBehaviour
         newTriangles.Add(faceCount * 4 + 2); //3
         newTriangles.Add(faceCount * 4 + 3); //4
 
-        newUV.Add(new Vector2(tUnit * texturePos.x + tUnit, tUnit * texturePos.y));
-        newUV.Add(new Vector2(tUnit * texturePos.x + tUnit, tUnit * texturePos.y + tUnit));
-        newUV.Add(new Vector2(tUnit * texturePos.x, tUnit * texturePos.y + tUnit));
-        newUV.Add(new Vector2(tUnit * texturePos.x, tUnit * texturePos.y));
+        newUV.Add(new Vector2(tUnitX * texturePos.x + tUnitX, tUnitY * texturePos.y));
+        newUV.Add(new Vector2(tUnitX * texturePos.x + tUnitX, tUnitY * texturePos.y + tUnitY));
+        newUV.Add(new Vector2(tUnitX * texturePos.x, tUnitY * texturePos.y + tUnitY));
+        newUV.Add(new Vector2(tUnitX * texturePos.x, tUnitY * texturePos.y));
 
         faceCount++; // Add this line
     }
