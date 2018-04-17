@@ -49,7 +49,7 @@ public class WormController : MonoBehaviour {
     }
 
     void FixedUpdate () {
-        isGrounded = Physics.Raycast(transform.position + transform.forward*0.5f, Vector3.down, 1.1f) || Physics.Raycast(transform.position - transform.forward * 0.5f, Vector3.down, 1.1f);
+        isGrounded = Physics.Raycast(transform.position + transform.forward*0.5f, Vector3.down, 1.1f, ~LayerMask.GetMask("Worm")) || Physics.Raycast(transform.position - transform.forward * 0.5f, Vector3.down, 1.1f, ~LayerMask.GetMask("Worm"));
 
         if(isJumping)
         {
@@ -67,7 +67,7 @@ public class WormController : MonoBehaviour {
 
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocityMagnitude);
 
-            if(Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.Return))
             {
                 Vector3 forceToAdd;
 
