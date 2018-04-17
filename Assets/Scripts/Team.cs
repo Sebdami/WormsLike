@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Team : MonoBehaviour {
+[System.Serializable]
+public class Team {
     int id;
 
     public int Id
@@ -17,13 +18,18 @@ public class Team : MonoBehaviour {
             id = value;
         }
     }
+    [SerializeField]
+    public Color teamColor;
 
-    List<CharacterData> characters;
+    [SerializeField]
+    public CharacterData[] characters;
+    [HideInInspector]
+    public GameObject[] characterInstances;
 
     public int GetTotalMaxHealth()
     {
         int sum = 0;
-        for(int i = 0; i < characters.Count; i++)
+        for(int i = 0; i < characters.Length; i++)
         {
             sum += characters[i].MaxHp;
         }
@@ -34,7 +40,7 @@ public class Team : MonoBehaviour {
     public int GetTotalCurrentHealth()
     {
         int sum = 0;
-        for (int i = 0; i < characters.Count; i++)
+        for (int i = 0; i < characters.Length; i++)
         {
             sum += characters[i].CurrentHp;
         }

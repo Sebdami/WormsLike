@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterData : MonoBehaviour {
+[System.Serializable]
+public class CharacterData {
+
     int id;
+    [SerializeField]
+    string characterName = "Jean René";
+
+    [SerializeField]
     int maxHp = 100;
     int currentHp = 100;
-    string characterName = "Jean René";
+
     int team = 0;
     bool isAlive = true;
 
@@ -93,6 +99,19 @@ public class CharacterData : MonoBehaviour {
         set
         {
             isAlive = value;
+        }
+    }
+
+    public int Id
+    {
+        get
+        {
+            return id;
+        }
+
+        set
+        {
+            id = value;
         }
     }
 }
