@@ -37,6 +37,8 @@ public class WormController : MonoBehaviour {
     bool isJumping = false;
     bool isGrounded = false;
 
+    CapsuleCollider capsuleCollider;
+
     private WormState CurrentState
     {
         get
@@ -57,12 +59,14 @@ public class WormController : MonoBehaviour {
     void Start () {
         character = GetComponent<CharacterInstance>();
         rb = GetComponent<Rigidbody>();
-	}
+        capsuleCollider = GetComponent<CapsuleCollider>();
+
+    }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawLine(transform.position + transform.forward * 0.5f, transform.position + transform.forward * 0.5f + Vector3.down * 1.1f);
-        Gizmos.DrawLine(transform.position - transform.forward * 0.5f, transform.position - transform.forward * 0.5f + Vector3.down * 1.1f);
+        Gizmos.DrawLine(transform.position + transform.forward * 0.48f, transform.position + transform.forward * 0.48f + Vector3.down * 1.1f);
+        Gizmos.DrawLine(transform.position - transform.forward * 0.48f, transform.position - transform.forward * 0.48f + Vector3.down * 1.1f);
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * 0.6f);
     }
 
@@ -163,8 +167,14 @@ public class WormController : MonoBehaviour {
 
     void HandleMovementStateFixed()
     {
-        isGrounded = Physics.Raycast(transform.position + transform.forward * 0.5f, Vector3.down, 1.1f, ~LayerMask.GetMask("WormTail")) 
-                  || Physics.Raycast(transform.position - transform.forward * 0.5f, Vector3.down, 1.1f, ~LayerMask.GetMask("WormTail"));
+        RaycastHit hit1;
+        RaycastHit hit2;
+
+        Physics.Raycast(transform.position + transform.forward * 0.48f, Vector3.down, out hit1, 1.1f, ~LayerMask.GetMask("WormTail"));
+        Physics.Raycast(transform.position - transform.forward * 0.48f, Vector3.down, out hit2, 1.1f, ~LayerMask.GetMask("WormTail"));
+
+        isGrounded = (hit1.collider != null && hit1.collider != capsuleCollider) || 
+                     (hit2.collider != null && hit2.collider != capsuleCollider);
 
         if (isJumping)
         {
@@ -180,7 +190,12 @@ public class WormController : MonoBehaviour {
                 transform.eulerAngles = Vector3.up * (inputHorizontal > 0.0f ? 90f : -90f);
             }
 
+
+            float oldY = rb.velocity.y;
+            // Clamp Velocity Magnitude
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocityMagnitude);
+            // Don't clamp on Y
+            rb.velocity = new Vector3(rb.velocity.x, oldY, rb.velocity.z);
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
