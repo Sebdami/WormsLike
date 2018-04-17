@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WormState
+{
+    Paused,
+    Movement,
+    Hit,
+    WeaponHandled,
+    Dead
+}
+
 public class WormController : MonoBehaviour {
-    enum WormState
-    {
-        Paused,
-        Movement,
-        Hit,
-        WeaponHandled,
-        Dead
-    }
 
     CharacterInstance character;
     Rigidbody rb;
@@ -39,7 +40,7 @@ public class WormController : MonoBehaviour {
 
     CapsuleCollider capsuleCollider;
 
-    private WormState CurrentState
+    public WormState CurrentState
     {
         get
         {

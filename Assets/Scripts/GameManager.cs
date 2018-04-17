@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour {
                 currentInstance.characterData = team.characters[i];
                 currentInstance.characterInfo = Instantiate(characterInfoPrefab, LevelCanvas.transform);
                 currentInstance.InitUI();
+                currentInstance.GetComponent<WormController>().CurrentState = WormState.Paused;
             }
         }
     }

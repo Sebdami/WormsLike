@@ -3,18 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RoundHandler : MonoBehaviour {
-    int numberOfTeams = 2;
+    int teamAmount;
     int[] lastActivePlayerForTeam;
-    int currentTeamRound = 0;
+    int currentActiveTeam = 0;
+    int currentActivePlayerIndex = 0;
+
     [SerializeField]
     float roundMaxTimer = 5.0f;
 
     float roundTimer = 0.0f;
 
-	// Use this for initialization
-	void Start () {
-        lastActivePlayerForTeam = new int[numberOfTeams];
+    public int CurrentActivePlayerIndex
+    {
+        get
+        {
+            return currentActivePlayerIndex;
+        }
 
+        set
+        {
+            GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Paused;
+            currentActivePlayerIndex = value;
+            GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Movement;
+        }
+    }
+
+    public int CurrentActiveTeam
+    {
+        get
+        {
+            return currentActiveTeam;
+        }
+
+        set
+        {
+            GameManager.instance.teams[currentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Paused;
+            currentActiveTeam = value;
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
+        teamAmount = GameManager.instance.teams.Length;
+        lastActivePlayerForTeam = new int[teamAmount];
+        CurrentActiveTeam = 0;
+        CurrentActivePlayerIndex = 0;
     }
 
 	void Update () {
@@ -22,17 +55,35 @@ public class RoundHandler : MonoBehaviour {
         if(roundTimer > roundMaxTimer)
         {
             roundTimer = 0.0f;
+            NextRound();
+        }
+
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            SwitchPlayer();
         }
 	}
 
     void NextRound()
     {
-        currentTeamRound = (currentTeamRound + 1) % numberOfTeams;
+        CurrentActiveTeam = (CurrentActiveTeam + 1) % teamAmount;
+        currentActivePlayerIndex = lastActivePlayerForTeam[CurrentActiveTeam];
+        SwitchPlayer();
     }
 
     void SwitchPlayer()
     {
-        lastActivePlayerForTeam[currentTeamRound] = 1;
+        int teamCharactersAmount = GameManager.instance.teams[CurrentActiveTeam].characters.Length;
+        for (int i = 1; i < teamCharactersAmount - 1; i++)
+        {
+            if(GameManager.instance.teams[CurrentActiveTeam].characters[(i + CurrentActivePlayerIndex)% teamCharactersAmount].IsAlive)
+            {
+                CurrentActivePlayerIndex = (i + CurrentActivePlayerIndex) % teamCharactersAmount;
+                break;
+            }
+        }
+
+        lastActivePlayerForTeam[CurrentActiveTeam] = CurrentActivePlayerIndex;
     }
 
 }
