@@ -46,14 +46,18 @@ public class World : MonoBehaviour
    
 	}
 	
+    public Vector3 TransformWorldPosToBlockPos(Vector3 worldPos)
+    {
+        return transform.worldToLocalMatrix.MultiplyPoint3x4(worldPos);
+    }
+
 	public void GenColumn(int x, int z){
 		for (int y=0; y<chunks.GetLength(1); y++) {
       
 					//Create a temporary Gameobject for the new chunk instead of using chunks[x,y,z]
-					GameObject newChunk = Instantiate (chunk, new Vector3 (x * chunkSizexy - 0.5f,
- y * chunkSizexy + 0.5f, z * chunkSizez - 0.5f), new Quaternion (0, 0, 0, 0)) as GameObject;
-      
-					chunks [x, y, z] = newChunk.GetComponent ("Chunk") as Chunk;
+					GameObject newChunk = Instantiate (chunk, new Vector3 (x * chunkSizexy - 0.5f,  y * chunkSizexy + 0.5f, z * chunkSizez - 0.5f), new Quaternion (0, 0, 0, 0)) as GameObject;
+            newChunk.transform.SetParent(transform);
+					chunks [x, y, z] = newChunk.GetComponent<Chunk>();
 					chunks [x, y, z].worldGO = gameObject;
 					chunks [x, y, z].chunkSize = chunkSizexy;
 					chunks [x, y, z].chunkX = x * chunkSizexy;
@@ -70,22 +74,6 @@ public class World : MonoBehaviour
 	}
     byte tmp;
 
-    public bool isInBounds(Vector3 pos)
-    {
-#pragma warning disable CS0168 // La variable e est déclarée mais jamais utilisée
-        try
-        {
-            tmp = data[(int)pos.x, (int)pos.y, (int)pos.z];
-        }
-
-        catch (Exception e)
-        {
-            return false;
-        }
-        return true;
-#pragma warning restore CS0168 // La variable est déclarée mais jamais utilisée
-    }
-
     public bool isInBounds(int x, int y, int z)
     {
 #pragma warning disable CS0168 // La variable e est déclarée mais jamais utilisée
@@ -100,11 +88,7 @@ public class World : MonoBehaviour
         return true;
 #pragma warning restore CS0168 // La variable est déclarée mais jamais utilisée
     }
-    // Update is called once per frame
-    void Update ()
-	{
-  
-	}
+
   
 	public byte Block (int x, int y, int z)
 	{
