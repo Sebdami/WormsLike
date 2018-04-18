@@ -16,6 +16,7 @@ public class BazookaProjectile : ExplosiveProjectile {
         isActive = false;
         transform.GetChild(0).gameObject.SetActive(false);
         Destroy(gameObject, 2.5f);
+        GetComponent<Collider>().enabled = false;
         Destroy(GetComponent<Collider>());
         Destroy(GetComponent<Rigidbody>());
         Destroy(Instantiate(explosion.particleSystem, transform.position, Quaternion.identity), 2.0f);

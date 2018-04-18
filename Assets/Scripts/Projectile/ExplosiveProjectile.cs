@@ -22,7 +22,7 @@ public class ExplosiveProjectile : Projectile {
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.collider);
-        Explode();
+        if(isActive)
+            Explode();
     }
 }
