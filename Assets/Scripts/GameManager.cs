@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject characterInfoPrefab;
 
+    public World world;
+
     [HideInInspector]
     public GameObject LevelCanvas;
     
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour {
 
         LevelCanvas = Instantiate(levelCanvasPrefab);
         teams = teamsManagerPrefab.GetComponent<TeamsManager>().GetInitializedTeams();
+        world = FindObjectOfType<World>();
 	}
 
     private void Start()

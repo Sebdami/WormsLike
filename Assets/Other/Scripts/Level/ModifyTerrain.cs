@@ -19,11 +19,11 @@ public class ModifyTerrain : MonoBehaviour {
 	void Update () {
 	
 		if(Input.GetMouseButtonDown(0)){
-			ReplaceBlockCenter(5,0);
+			//ReplaceBlockCenter(5,0);
 		}
 		
 		if(Input.GetMouseButtonDown(1)){
-			AddBlockCenter(5,255);
+			//AddBlockCenter(5,255);
 			
 		}
 		
@@ -45,59 +45,24 @@ public class ModifyTerrain : MonoBehaviour {
 		
 	}
 	
-	public void ReplaceBlockCenter(float range, byte block){
-		//Replaces the block directly in front of the player
-		
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-        //Collider[] colliders = Physics.OverlapSphere(transform.position, 5.0f);
-        //Debug.Log("oi");
-        //if (colliders != null)
-        //{
-        //    for (int i = 0; i < colliders.Length; i++)
-        //    {
-        //        Debug.Log(colliders[i].transform.position);
-        //        SetBlockAt(colliders[i].transform.position, block);
-        //    }
-        //}
-
-        if (Physics.Raycast(ray, out hit))
+	public void SphereAtPosition(Vector3 _pos, float radius, byte block = 0){
+        _pos.x = Mathf.Round(_pos.x);
+        _pos.y = Mathf.Round(_pos.y);
+        _pos.z = Mathf.Round(_pos.z);
+        radius *= 2.0f;
+        for (int x = (int)(_pos.x - radius); x < (int)(_pos.x + radius); x++)
         {
-            range *= 2.0f;
-
-            Vector3 position = hit.point;
-            position += (hit.normal * 0.5f);
-            position.x = Mathf.Round(position.x);
-            position.y = Mathf.Round(position.y);
-            position.z = Mathf.Round(position.z);
-
-            for (int x = (int)(position.x - range); x < (int)(position.x + range); x++)
+            for (int y = (int)(_pos.y - radius); y < (int)(_pos.y + radius); y++)
             {
-                for (int y = (int)(position.y - range); y < (int)(position.y + range); y++)
+                for (int z = (int)(_pos.z - radius); z < (int)(_pos.z + radius); z++)
                 {
-                    for (int z = (int)(position.z - range); z < (int)(position.z + range); z++)
-                    {
 
-                        Vector3 newPos = new Vector3(x, y, z);
-                        if (Vector3.Distance(position, newPos) < range/ 2.0f)
+                    Vector3 newPos = new Vector3(x, y, z);
+                    if (Vector3.Distance(_pos, newPos) < radius / 2.0f)
                         SetBlockAt(newPos, block);
-                    }
                 }
             }
         }
-
-        
-
-
-
-
-        //if (Physics.Raycast (ray, out hit)) {
-
-        //	if(hit.distance<range){
-        //		ReplaceBlockAt(hit, block);
-        //	}
-        //}
-
     }
 
 	public void AddBlockCenter(float range, byte block){

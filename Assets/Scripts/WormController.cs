@@ -12,7 +12,9 @@ public enum WormState
 }
 
 public class WormController : MonoBehaviour {
-
+    RigidbodyConstraints basicConstraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+    RigidbodyConstraints hitConstraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
+    RigidbodyConstraints pausedConstraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
     CharacterInstance character;
     Rigidbody rb;
     [SerializeField]
@@ -57,9 +59,24 @@ public class WormController : MonoBehaviour {
         }
     }
 
+    public Rigidbody Rb
+    {
+        get
+        {
+            if (!rb)
+                rb = GetComponent<Rigidbody>();
+            return rb;
+        }
+
+        set
+        {
+            rb = value;
+        }
+    }
+
     void Start () {
         character = GetComponent<CharacterInstance>();
-        rb = GetComponent<Rigidbody>();
+        Rb = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
 
     }
@@ -128,6 +145,7 @@ public class WormController : MonoBehaviour {
         switch (state)
         {
             case WormState.Paused:
+                EnterPausedState();
                 break;
             case WormState.Movement:
                 EnterMovementState();
@@ -147,6 +165,7 @@ public class WormController : MonoBehaviour {
         switch (state)
         {
             case WormState.Paused:
+                ExitPausedState();
                 break;
             case WormState.Movement:
                 break;
@@ -159,6 +178,20 @@ public class WormController : MonoBehaviour {
                 break;
         }
     }
+
+    #region PausedState
+    void EnterPausedState()
+    {
+        // Set the mass to a high value so you can't be pushed
+        Rb.constraints = pausedConstraints;
+        transform.eulerAngles = Vector3.up * (transform.forward.x > 0 ? 90 : -90);
+    }
+
+    void ExitPausedState()
+    {
+        Rb.constraints = basicConstraints;
+    }
+    #endregion
 
     #region MovementState
     void EnterMovementState()
@@ -179,24 +212,24 @@ public class WormController : MonoBehaviour {
 
         if (isJumping)
         {
-            rb.AddRelativeForce(jumpingForwardConstantForce);
+            Rb.AddRelativeForce(jumpingForwardConstantForce);
         }
 
         if (isGrounded && !isJumping)
         {
             float inputHorizontal = Input.GetAxisRaw("Horizontal");
-            rb.AddForce(Vector3.right * inputHorizontal * moveSpeed);
+            Rb.AddForce(Vector3.right * inputHorizontal * moveSpeed);
             if (Mathf.Abs(inputHorizontal) > 0.1f)
             {
                 transform.eulerAngles = Vector3.up * (inputHorizontal > 0.0f ? 90f : -90f);
             }
 
 
-            float oldY = rb.velocity.y;
+            float oldY = Rb.velocity.y;
             // Clamp Velocity Magnitude
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocityMagnitude);
+            Rb.velocity = Vector3.ClampMagnitude(Rb.velocity, maxVelocityMagnitude);
             // Don't clamp on Y
-            rb.velocity = new Vector3(rb.velocity.x, oldY, rb.velocity.z);
+            Rb.velocity = new Vector3(Rb.velocity.x, oldY, Rb.velocity.z);
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
@@ -212,8 +245,8 @@ public class WormController : MonoBehaviour {
                     forceToAdd = (Vector3.up * 2.0f + Vector3.forward);
                 }
 
-                rb.velocity = Vector3.zero;
-                rb.AddRelativeForce(forceToAdd * jumpForce, ForceMode.VelocityChange);
+                Rb.velocity = Vector3.zero;
+                Rb.AddRelativeForce(forceToAdd * jumpForce, ForceMode.VelocityChange);
                 isGrounded = false;
                 isJumping = true;
             }
@@ -229,19 +262,19 @@ public class WormController : MonoBehaviour {
 
     void EnterHitState()
     {
-        rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
+        Rb.constraints = hitConstraints;
         hitTimeTimer = 0.0f;
     }
 
     void ExitHitState()
     {
-        rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        Rb.constraints = basicConstraints;
     }
 
     void HandleHitState()
     {
         hitTimeTimer += Time.deltaTime;
-        if(hitTimeTimer >= maxHitTimeTimer)
+        if(hitTimeTimer >= maxHitTimeTimer && Rb.velocity.magnitude < 0.1f)
         {
             CurrentState = previousState;
         }
