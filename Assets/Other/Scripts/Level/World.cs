@@ -61,53 +61,42 @@ public class World : MonoBehaviour
 				
 			}
 	}
-	
-	public void UnloadColumn(int x, int z){
-		//for (int y=0; y<chunks.GetLength(1); y++) {
-		//	Object.Destroy(chunks [x, y, z].gameObject);
-			
-		//}
-	}
   
 	int PerlinNoise (int x, int y, int z, float scale, float height, float power)
 	{
         return (int)(Mathf.Pow((Mathf.PerlinNoise(x / scale, y / scale) * height), (2)));
-
-        float rValue;
-		rValue = Noise.GetNoise (((double)x) / scale, ((double)y) / scale, ((double)z) / scale);
-		rValue *= height;
-   
-		if (power != 0) {
-			rValue = Mathf.Pow (rValue, power);
-		}
-        
-        return (int)rValue;
 	}
-  
+    byte tmp;
+
     public bool isInBounds(Vector3 pos)
     {
+#pragma warning disable CS0168 // La variable e est déclarée mais jamais utilisée
         try
         {
-            byte tmp = data[(int)pos.x, (int)pos.y, (int)pos.z];
+            tmp = data[(int)pos.x, (int)pos.y, (int)pos.z];
         }
-        catch(Exception e)
+
+        catch (Exception e)
         {
             return false;
         }
         return true;
+#pragma warning restore CS0168 // La variable est déclarée mais jamais utilisée
     }
 
     public bool isInBounds(int x, int y, int z)
     {
+#pragma warning disable CS0168 // La variable e est déclarée mais jamais utilisée
         try
         {
-            byte tmp = data[x, y, z];
+            tmp = data[x, y, z];
         }
         catch (Exception e)
         {
             return false;
         }
         return true;
+#pragma warning restore CS0168 // La variable est déclarée mais jamais utilisée
     }
     // Update is called once per frame
     void Update ()

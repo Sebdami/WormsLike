@@ -7,8 +7,6 @@ public class GameManager : MonoBehaviour {
     public Team[] teams;
 
     [SerializeField]
-    int teamAmount = 2;
-    [SerializeField]
     GameObject levelCanvasPrefab;
 
     [SerializeField]
@@ -48,6 +46,7 @@ public class GameManager : MonoBehaviour {
             {
                 team.characterInstances[i] = Instantiate(characterPrefab);
                 CharacterInstance currentInstance = team.characterInstances[i].GetComponent<CharacterInstance>();
+                currentInstance.transform.position += Vector3.right*i;
                 currentInstance.characterData = team.characters[i];
                 currentInstance.characterInfo = Instantiate(characterInfoPrefab, LevelCanvas.transform);
                 currentInstance.InitUI();

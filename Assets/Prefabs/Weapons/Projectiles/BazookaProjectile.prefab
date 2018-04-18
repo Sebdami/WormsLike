@@ -198,6 +198,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ExplosionRadius: 6
   ExplosionForce: 10
+  Damage: 50
+  DamageFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: -2.5799994
+      outSlope: -2.5799994
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
   UpLiftForce: 2
   launchForce: 23
 --- !u!135 &135689504727043640

@@ -5,6 +5,8 @@ using UnityEngine;
 public class ExplosiveProjectile : Projectile {
     public float ExplosionRadius = 6.0f;
     public float ExplosionForce = 10.0f;
+    public int Damage = 50;
+    public AnimationCurve DamageFalloff = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 0.0f);
     public float UpLiftForce = 2.0f;
 
     public virtual void Explode()
@@ -14,7 +16,11 @@ public class ExplosiveProjectile : Projectile {
         foreach (Collider col in affectedColliders)
         {
             col.GetComponent<WormController>().CurrentState = WormState.Hit;
-            col.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, ExplosionRadius, UpLiftForce, ForceMode.Impulse);
+            float damageFallOffMultiplier =DamageFalloff.Evaluate(Vector3.Distance(transform.position, col.transform.position) / ExplosionRadius);
+
+            col.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce * damageFallOffMultiplier, transform.position, ExplosionRadius, UpLiftForce * damageFallOffMultiplier, ForceMode.Impulse);
+            // Apply damage with falloff
+            col.GetComponent<CharacterInstance>().CurrentHp -= (int)(Damage * damageFallOffMultiplier);
         }
 
         Destroy(gameObject);
