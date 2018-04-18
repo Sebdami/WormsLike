@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4341979162633904}
   - component: {fileID: 198511987482796108}
   - component: {fileID: 199838280777862610}
-  - component: {fileID: 114888965788688160}
   m_Layer: 12
   m_Name: SplashParticleSystem
   m_TagString: Untagged
@@ -55,6 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4710592696070430}
   - component: {fileID: 114788525407527706}
+  - component: {fileID: 114040263901444658}
   m_Layer: 0
   m_Name: WaterSplash
   m_TagString: Untagged
@@ -69,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058801545851694}
   m_LocalRotation: {x: 1, y: -0, z: -0, w: -0.00000035762784}
-  m_LocalPosition: {x: -84.637726, y: -20.535885, z: -53.291473}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4710592696070430}
@@ -81,8 +81,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1114261535470192}
-  m_LocalRotation: {x: -0, y: 0.858279, z: -0, w: 0.5131835}
-  m_LocalPosition: {x: -84.637726, y: -20.535885, z: -53.291473}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 1.2122619, y: 1.21226, z: 1.2122619}
   m_Children: []
   m_Father: {fileID: 4710592696070430}
@@ -103,6 +103,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114040263901444658
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1925672133032910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2de7a81c34f8f194dbb8ac40bfa722b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seconds: 3
 --- !u!114 &114788525407527706
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -112,17 +124,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c439c416729c0f445b929be04cfcc057, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114888965788688160
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1058801545851694}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!198 &198511987482796108
