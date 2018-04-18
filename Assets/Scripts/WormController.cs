@@ -36,8 +36,8 @@ public class WormController : MonoBehaviour {
     WormState currentState;
 
     WormState previousState;
-    
-    public Weapon CurrentWeapon;
+
+    private Weapon currentWeapon;
 
     float jumpTimer = 0.0f;
 
@@ -85,6 +85,21 @@ public class WormController : MonoBehaviour {
         }
     }
 
+    public Weapon CurrentWeapon
+    {
+        get
+        {
+            if (!currentWeapon)
+                currentWeapon = GetComponentInChildren<Weapon>();
+            return currentWeapon;
+        }
+
+        set
+        {
+            currentWeapon = value;
+        }
+    }
+
     void Start () {
         character = GetComponent<CharacterInstance>();
         character.characterData.OnDeath += Die;
@@ -108,6 +123,7 @@ public class WormController : MonoBehaviour {
 
     private void Update()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, 1);
         // Handle jump cooldown
         if (isJumping)
         {

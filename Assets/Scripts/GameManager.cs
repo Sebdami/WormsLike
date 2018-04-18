@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour {
 
     public World world;
 
+    public RoundHandler roundHandler;
+
     [HideInInspector]
     public GameObject LevelCanvas;
     
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour {
         LevelCanvas = Instantiate(levelCanvasPrefab);
         teams = teamsManagerPrefab.GetComponent<TeamsManager>().GetInitializedTeams();
         world = FindObjectOfType<World>();
+        roundHandler = FindObjectOfType<RoundHandler>();
 	}
 
     private void Start()

@@ -70,13 +70,14 @@ public class ProjectileLauncherWeapon : Weapon {
         currentAngle = Mathf.Clamp(currentAngle, -maxAngleUp, maxAngleDown);
         transform.localEulerAngles = new Vector3(currentAngle, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) && currentRoundUsesLeft > 0)
         {
             isShooting = true;
             currentLaunchPower = minLaunchPower;
             currentLaunchTimer = 0.0f;
             powerIsRising = true;
             ownerController.CurrentState = WormState.WeaponHandled;
+            currentRoundUsesLeft--;
         }
     }
 
@@ -95,13 +96,5 @@ public class ProjectileLauncherWeapon : Weapon {
         yield return new WaitForSeconds(seconds);
         if(col1 && col2)
             Physics.IgnoreCollision(col1, col2, false);
-    }
-
-    protected override void OnControllerStateChange(WormState oldState, WormState newState)
-    {
-        if(newState != WormState.Movement && newState != WormState.WeaponHandled)
-        {
-
-        }
     }
 }

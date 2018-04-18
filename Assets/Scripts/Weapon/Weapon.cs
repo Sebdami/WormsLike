@@ -7,20 +7,18 @@ public class Weapon : MonoBehaviour {
     public WeaponEvent OnWeaponStartUse;
     public WeaponEvent OnWeaponEndUse;
 
+    public int maxUsePerRound = 1;
+    public int currentRoundUsesLeft;
+
     public WormController ownerController;
     protected void Start()
     {
         ownerController = GetComponentInParent<WormController>();
-        ownerController.OnStateChange += OnControllerStateChange;
+        currentRoundUsesLeft = maxUsePerRound;
     }
 
-    protected void OnDestroy()
+    public void ResetUses()
     {
-        ownerController.OnStateChange -= OnControllerStateChange;
-    }
-
-    protected virtual void OnControllerStateChange(WormState oldState, WormState newState)
-    {
-
+        currentRoundUsesLeft = maxUsePerRound;
     }
 }

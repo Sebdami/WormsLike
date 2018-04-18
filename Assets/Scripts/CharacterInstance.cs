@@ -11,19 +11,12 @@ public class CharacterInstance : MonoBehaviour {
 
     WormController controller;
 
-    Text hpText;
-    Text nameText;
-
     public int CurrentHp
     {
         get { return characterData.CurrentHp; }
         set
         {
             characterData.CurrentHp = value;
-            if(!hpText)
-                hpText = characterInfo.transform.GetChild(1).GetChild(0).GetComponent<Text>();
-
-            hpText.text = value.ToString();
         }
     }
 
