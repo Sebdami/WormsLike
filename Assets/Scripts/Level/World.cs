@@ -46,7 +46,7 @@ public class World : MonoBehaviour
    
 	}
 	
-    public Vector3 TransformWorldPosToBlockPos(Vector3 worldPos)
+    public Vector3 TransformWorldPosToLocal(Vector3 worldPos)
     {
         return transform.worldToLocalMatrix.MultiplyPoint3x4(worldPos);
     }
@@ -54,23 +54,24 @@ public class World : MonoBehaviour
 	public void GenColumn(int x, int z){
 		for (int y=0; y<chunks.GetLength(1); y++) {
       
-					//Create a temporary Gameobject for the new chunk instead of using chunks[x,y,z]
-					GameObject newChunk = Instantiate (chunk, new Vector3 (x * chunkSizexy - 0.5f,  y * chunkSizexy + 0.5f, z * chunkSizez - 0.5f), new Quaternion (0, 0, 0, 0)) as GameObject;
+			//Create a temporary Gameobject for the new chunk instead of using chunks[x,y,z]
+			GameObject newChunk = Instantiate (chunk, new Vector3 ((x * chunkSizexy - 0.5f) * transform.localScale.x,  (y * chunkSizexy + 0.5f) * transform.localScale.y, (z * chunkSizez - 0.5f) * transform.localScale.z), new Quaternion (0, 0, 0, 0)) as GameObject;
             newChunk.transform.SetParent(transform);
-					chunks [x, y, z] = newChunk.GetComponent<Chunk>();
-					chunks [x, y, z].worldGO = gameObject;
-					chunks [x, y, z].chunkSize = chunkSizexy;
-					chunks [x, y, z].chunkX = x * chunkSizexy;
-					chunks [x, y, z].chunkY = y * chunkSizexy;
-					chunks [x, y, z].chunkZ = z * chunkSizez;
+            newChunk.transform.localScale = Vector3.one;
+			chunks [x, y, z] = newChunk.GetComponent<Chunk>();
+			chunks [x, y, z].worldGO = gameObject;
+			chunks [x, y, z].chunkSize = chunkSizexy;
+			chunks [x, y, z].chunkX = x * chunkSizexy;
+			chunks [x, y, z].chunkY = y * chunkSizexy;
+			chunks [x, y, z].chunkZ = z * chunkSizez;
       
 				
-			}
+		}
 	}
   
 	int PerlinNoise (int x, int y, int z, float scale, float height, float power)
 	{
-        return (int)(Mathf.Pow((Mathf.PerlinNoise(x / scale, y / scale) * height), (2)));
+        return (int)(Mathf.Pow((Mathf.PerlinNoise(x / scale, y / scale) * height), (2))+z/40.0f);
 	}
     byte tmp;
 

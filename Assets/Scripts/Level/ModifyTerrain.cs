@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class ModifyTerrain : MonoBehaviour {
@@ -46,9 +47,11 @@ public class ModifyTerrain : MonoBehaviour {
 	}
 	
 	public void SphereAtPosition(Vector3 _pos, float radius, byte block = 0){
+        _pos = world.TransformWorldPosToLocal(_pos);
         _pos.x = Mathf.Round(_pos.x);
         _pos.y = Mathf.Round(_pos.y);
         _pos.z = Mathf.Round(_pos.z);
+        radius /= world.transform.localScale.x;
         radius *= 2.0f;
         for (int x = (int)(_pos.x - radius); x < (int)(_pos.x + radius); x++)
         {
@@ -85,30 +88,30 @@ public class ModifyTerrain : MonoBehaviour {
         
         //adds the specified block at these coordinates
 
-        if (world.isInBounds(x + 1, y, z) && world.data[x + 1, y, z] == 254)
-        {
-            world.data[x + 1, y, z] = 255;
-        }
+  //      if (world.isInBounds(x + 1, y, z) && world.data[x + 1, y, z] == 254)
+  //      {
+  //          world.data[x + 1, y, z] = 255;
+  //      }
 
-        if (world.isInBounds(x-1, y, z) && world.data[x-1,y,z]==254){
-			world.data[x-1,y,z]=255;
-		}
-		if(world.isInBounds(x, y, z + 1) && world.data[x,y,z+1]==254){
-			world.data[x,y,z+1]=255;
-		}
-		if(world.isInBounds(x,y,z - 1) && world.data[x,y,z-1]==254){
-			world.data[x,y,z-1]=255;
-		}
-		if(world.isInBounds(x, y + 1, z) && world.data[x,y+1,z]==254){
-			world.data[x,y+1,z]=255;
-		}
+  //      if (world.isInBounds(x-1, y, z) && world.data[x-1,y,z]==254){
+		//	world.data[x-1,y,z]=255;
+		//}
+		//if(world.isInBounds(x, y, z + 1) && world.data[x,y,z+1]==254){
+		//	world.data[x,y,z+1]=255;
+		//}
+		//if(world.isInBounds(x,y,z - 1) && world.data[x,y,z-1]==254){
+		//	world.data[x,y,z-1]=255;
+		//}
+		//if(world.isInBounds(x, y + 1, z) && world.data[x,y+1,z]==254){
+		//	world.data[x,y+1,z]=255;
+		//}
 		world.data[x,y,z]=block;
-		
-		UpdateChunkAt(x,y,z);
-	
-	}
-	
-	public void UpdateChunkAt(int x, int y, int z)
+
+        UpdateChunkAt(x, y, z);
+
+    }
+
+    public void UpdateChunkAt(int x, int y, int z)
     { 
 		//Updates the chunk containing this block
 		
