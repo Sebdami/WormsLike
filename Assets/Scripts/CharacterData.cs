@@ -4,6 +4,11 @@ using UnityEngine;
 
 [System.Serializable]
 public class CharacterData {
+    public delegate void CharacterEvent();
+    public delegate void CharacterHealthEvent(int diff);
+
+    public CharacterEvent OnDeath;
+    public CharacterHealthEvent OnHealthChange;
 
     int id;
     [SerializeField]
@@ -30,13 +35,6 @@ public class CharacterData {
         currentHp = maxHp;
     }
 
-    public void GetHit(int damage)
-    {
-        CurrentHp -= damage;
-        if (CurrentHp <= 0)
-            IsAlive = false;
-    }
-
     public int MaxHp
     {
         get
@@ -59,7 +57,14 @@ public class CharacterData {
 
         set
         {
+            int diff = value - currentHp;
             currentHp = value;
+            if (currentHp <= 0)
+                IsAlive = false;
+            if (currentHp > maxHp)
+                maxHp = currentHp;
+            if (OnHealthChange != null)
+                OnHealthChange(diff);
         }
     }
 
@@ -98,7 +103,17 @@ public class CharacterData {
 
         set
         {
-            isAlive = value;
+            if (value != isAlive)
+            {
+                isAlive = value;
+                if (!value)
+                {
+                    if (OnDeath != null)
+                    {
+                        OnDeath();
+                    }
+                }
+            }
         }
     }
 

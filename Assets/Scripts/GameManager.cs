@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour {
 
     private void Start()
     {
+        int posIndex = 0;
         foreach(Team team in teams)
         {
             team.characterInstances = new GameObject[team.characters.Length];
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour {
             {
                 team.characterInstances[i] = Instantiate(characterPrefab);
                 CharacterInstance currentInstance = team.characterInstances[i].GetComponent<CharacterInstance>();
-                currentInstance.transform.position += Vector3.right*i;
+                currentInstance.transform.position += Vector3.right* posIndex++;
                 currentInstance.characterData = team.characters[i];
                 currentInstance.characterInfo = Instantiate(characterInfoPrefab, LevelCanvas.transform);
                 currentInstance.InitUI();

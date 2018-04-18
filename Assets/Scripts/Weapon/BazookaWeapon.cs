@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BazookaWeapon : MonoBehaviour {
+public class BazookaWeapon : ProjectileLauncherWeapon {
 
 }

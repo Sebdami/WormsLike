@@ -12,6 +12,10 @@ public enum WormState
 }
 
 public class WormController : MonoBehaviour {
+    public delegate void StateChange(WormState oldState, WormState newState);
+
+    public StateChange OnStateChange;
+
     RigidbodyConstraints basicConstraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
     RigidbodyConstraints hitConstraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
     RigidbodyConstraints pausedConstraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
@@ -32,6 +36,8 @@ public class WormController : MonoBehaviour {
     WormState currentState;
 
     WormState previousState;
+    
+    public Weapon CurrentWeapon;
 
     float jumpTimer = 0.0f;
 
@@ -51,11 +57,16 @@ public class WormController : MonoBehaviour {
 
         set
         {
+            WormState old = currentState;
             ExitState(currentState);
             if(currentState != value)
                 previousState = currentState;
             currentState = value;
             EnterState(currentState);
+            if(OnStateChange != null)
+            {
+                OnStateChange(old, currentState);
+            }
         }
     }
 
@@ -76,9 +87,16 @@ public class WormController : MonoBehaviour {
 
     void Start () {
         character = GetComponent<CharacterInstance>();
+        character.characterData.OnDeath += Die;
         Rb = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
 
+    }
+
+    void Die()
+    {
+        CurrentState = WormState.Dead;
+        character.characterInfo.SetActive(false);
     }
 
     private void OnDrawGizmosSelected()
@@ -156,6 +174,7 @@ public class WormController : MonoBehaviour {
             case WormState.WeaponHandled:
                 break;
             case WormState.Dead:
+                EnterDeadState();
                 break;
         }
     }
@@ -279,6 +298,14 @@ public class WormController : MonoBehaviour {
             CurrentState = previousState;
         }
     }
+    #endregion
+
+    #region DeadState
+    void EnterDeadState()
+    {
+        rb.constraints = hitConstraints;
+    }
+
     #endregion
 }
 

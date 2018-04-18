@@ -18,12 +18,11 @@ public class ExplosiveProjectile : Projectile {
             // Apply damage with falloff
             col.GetComponent<CharacterInstance>().CurrentHp -= (int)(explosion.Damage * damageFallOffMultiplier);
         }
-
-        Destroy(gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.collider);
         Explode();
     }
 }

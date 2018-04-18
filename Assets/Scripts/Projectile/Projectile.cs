@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour {
     protected Rigidbody rb;
+    public bool isActive = true;
 	protected void Start () {
         rb = GetComponent<Rigidbody>();
         if (!rb)
@@ -11,6 +12,8 @@ public class Projectile : MonoBehaviour {
 	}
 
     protected void FixedUpdate () {
+        if (!isActive)
+            return;
 		if(rb.velocity.magnitude > 0.1f)
         {
             transform.LookAt(transform.position + rb.velocity);
@@ -19,6 +22,12 @@ public class Projectile : MonoBehaviour {
 
     public void Launch(Vector3 direction, float force)
     {
+        if(!rb)
+        {
+            rb = GetComponent<Rigidbody>();
+            if (!rb)
+                rb = gameObject.AddComponent<Rigidbody>();
+        }
         direction.Normalize();
         rb.AddForce(direction * force, ForceMode.Impulse);
     }

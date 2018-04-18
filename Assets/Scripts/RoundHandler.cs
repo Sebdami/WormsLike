@@ -22,9 +22,13 @@ public class RoundHandler : MonoBehaviour {
 
         set
         {
-            GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Paused;
+            CharacterInstance inst = GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<CharacterInstance>();
+            inst.GetComponent<WormController>().CurrentState = inst.GetComponent<WormController>().CurrentState == WormState.Dead? WormState.Dead : WormState.Paused;
+            inst.characterData.OnHealthChange += OnCurrentCharacterHealthChange;
             currentActivePlayerIndex = value;
             GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Movement;
+            GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<CharacterInstance>().characterData.OnHealthChange -= OnCurrentCharacterHealthChange;
+            //Remove also WormController OnStateChnage
         }
     }
 
@@ -39,6 +43,14 @@ public class RoundHandler : MonoBehaviour {
         {
             GameManager.instance.teams[currentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Paused;
             currentActiveTeam = value;
+        }
+    }
+
+    void OnCurrentCharacterHealthChange(int diff)
+    {
+        if(diff < 0)
+        {
+            //Use worm controller OnStateChange
         }
     }
 
@@ -74,7 +86,7 @@ public class RoundHandler : MonoBehaviour {
     void SwitchPlayer()
     {
         int teamCharactersAmount = GameManager.instance.teams[CurrentActiveTeam].characters.Length;
-        for (int i = 1; i < teamCharactersAmount - 1; i++)
+        for (int i = 1; i < teamCharactersAmount; i++)
         {
             if(GameManager.instance.teams[CurrentActiveTeam].characters[(i + CurrentActivePlayerIndex)% teamCharactersAmount].IsAlive)
             {

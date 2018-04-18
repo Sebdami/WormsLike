@@ -10,4 +10,5 @@ public class Explosion
     public int Damage = 50;
     public AnimationCurve DamageFalloff = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 0.0f);
     public float UpLiftForce = 2.0f;
+    public ParticleSystem particleSystem;
 }

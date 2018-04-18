@@ -36,4 +36,10 @@ public class CharacterInstance : MonoBehaviour {
         hpText.text = characterData.CurrentHp.ToString();
         hpText.color = GameManager.instance.teams[characterData.Team].teamColor;
     }
+
+    private void OnDestroy()
+    {
+        Destroy(characterInfo);
+    }
+
 }
