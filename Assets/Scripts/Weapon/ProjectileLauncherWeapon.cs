@@ -57,6 +57,13 @@ public class ProjectileLauncherWeapon : Weapon {
                 isShooting = false;
             }
         }
+        else
+        {
+            if(ownerController.CurrentState == WormState.WeaponHandled)
+            {
+                ownerController.CurrentState = WormState.Movement;
+            }
+        }
         transform.Rotate(-Vector3.right * Input.GetAxisRaw("Vertical") * rotationSpeed * Time.deltaTime);
         currentAngle = transform.localEulerAngles.x;
         currentAngle = (currentAngle > 180) ? currentAngle - 360 : currentAngle;
@@ -69,6 +76,7 @@ public class ProjectileLauncherWeapon : Weapon {
             currentLaunchPower = minLaunchPower;
             currentLaunchTimer = 0.0f;
             powerIsRising = true;
+            ownerController.CurrentState = WormState.WeaponHandled;
         }
     }
 

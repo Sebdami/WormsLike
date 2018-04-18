@@ -7,6 +7,8 @@ public class RoundHandler : MonoBehaviour {
     int[] lastActivePlayerForTeam;
     int currentActiveTeam = 0;
     int currentActivePlayerIndex = 0;
+    CharacterInstance currentActiveCharacter = null;
+
 
     [SerializeField]
     float roundMaxTimer = 5.0f;
@@ -22,13 +24,30 @@ public class RoundHandler : MonoBehaviour {
 
         set
         {
-            CharacterInstance inst = GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<CharacterInstance>();
-            inst.GetComponent<WormController>().CurrentState = inst.GetComponent<WormController>().CurrentState == WormState.Dead? WormState.Dead : WormState.Paused;
-            inst.characterData.OnHealthChange += OnCurrentCharacterHealthChange;
+            WormController currentController = GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>();
+            currentController.CurrentState = currentController.CurrentState == WormState.Dead ? WormState.Dead : WormState.Paused;
+            currentController.OnStateChange -= OnStateChange;
+            if(currentActiveCharacter)
+                currentActiveCharacter.Deselect();
             currentActivePlayerIndex = value;
             GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Movement;
-            GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<CharacterInstance>().characterData.OnHealthChange -= OnCurrentCharacterHealthChange;
-            //Remove also WormController OnStateChnage
+
+            currentController = GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>();
+            currentController.OnStateChange += OnStateChange;
+            currentController.GetComponent<CharacterInstance>().Select();
+            currentActiveCharacter = currentController.GetComponent<CharacterInstance>();
+        }
+    }
+
+    void OnStateChange(WormState oldState, WormState newState)
+    {
+        if(oldState == WormState.WeaponHandled)
+        {
+            roundTimer = 5.0f;
+        }
+        if(oldState == WormState.Hit)
+        {
+            roundTimer = 0.0f;
         }
     }
 
@@ -46,12 +65,17 @@ public class RoundHandler : MonoBehaviour {
         }
     }
 
-    void OnCurrentCharacterHealthChange(int diff)
+    bool IsEveryoneReady()
     {
-        if(diff < 0)
+        CharacterInstance[] characters = GameManager.instance.GetAliveCharacters();
+        bool ready = true;
+        for(int i = 0; i < characters.Length; i++)
         {
-            //Use worm controller OnStateChange
+            if (characters[i].Controller.CurrentState == WormState.Hit || characters[i].Controller.CurrentState == WormState.WeaponHandled)
+                ready = false;
         }
+
+        return ready;
     }
 
     // Use this for initialization
@@ -60,13 +84,14 @@ public class RoundHandler : MonoBehaviour {
         lastActivePlayerForTeam = new int[teamAmount];
         CurrentActiveTeam = 0;
         CurrentActivePlayerIndex = 0;
+        roundTimer = roundMaxTimer;
+        //currentActiveCharacter.Select();
     }
 
 	void Update () {
-        roundTimer += Time.deltaTime;
-        if(roundTimer > roundMaxTimer)
+        roundTimer -= Time.deltaTime;
+        if(roundTimer <= 0.0f && IsEveryoneReady())
         {
-            roundTimer = 0.0f;
             NextRound();
         }
 
@@ -81,6 +106,7 @@ public class RoundHandler : MonoBehaviour {
         CurrentActiveTeam = (CurrentActiveTeam + 1) % teamAmount;
         currentActivePlayerIndex = lastActivePlayerForTeam[CurrentActiveTeam];
         SwitchPlayer();
+        roundTimer = roundMaxTimer;
     }
 
     void SwitchPlayer()

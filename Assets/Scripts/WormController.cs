@@ -220,14 +220,11 @@ public class WormController : MonoBehaviour {
 
     void HandleMovementStateFixed()
     {
-        RaycastHit hit1;
-        RaycastHit hit2;
+        RaycastHit hit;
 
-        Physics.Raycast(transform.position + transform.forward * 0.48f, Vector3.down, out hit1, 1.1f, ~LayerMask.GetMask("WormTail"));
-        Physics.Raycast(transform.position - transform.forward * 0.48f, Vector3.down, out hit2, 1.1f, ~LayerMask.GetMask("WormTail"));
+        Physics.SphereCast(transform.position, 0.48f, Vector3.down, out hit, 1.1f, ~LayerMask.GetMask("WormTail"));
 
-        isGrounded = (hit1.collider != null && hit1.collider != capsuleCollider) || 
-                     (hit2.collider != null && hit2.collider != capsuleCollider);
+        isGrounded = (hit.collider != null && hit.collider != capsuleCollider);
 
         if (isJumping)
         {
@@ -295,7 +292,10 @@ public class WormController : MonoBehaviour {
         hitTimeTimer += Time.deltaTime;
         if(hitTimeTimer >= maxHitTimeTimer && Rb.velocity.magnitude < 0.1f)
         {
-            CurrentState = previousState;
+            if (previousState == WormState.WeaponHandled)
+                CurrentState = WormState.Movement;
+            else
+                CurrentState = previousState;
         }
     }
     #endregion

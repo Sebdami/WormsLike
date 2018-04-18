@@ -50,10 +50,30 @@ public class GameManager : MonoBehaviour {
                 currentInstance.transform.position += Vector3.right* posIndex++;
                 currentInstance.characterData = team.characters[i];
                 currentInstance.characterInfo = Instantiate(characterInfoPrefab, LevelCanvas.transform);
-                currentInstance.InitUI();
+                currentInstance.characterInfo.GetComponent<UICharacterInfo>().Init(currentInstance);
                 currentInstance.GetComponent<WormController>().CurrentState = WormState.Paused;
             }
         }
+    }
+
+    public CharacterInstance[] GetAliveCharacters()
+    {
+        List<CharacterInstance> toReturn = new List<CharacterInstance>();
+        foreach (Team team in teams)
+        {
+            foreach(GameObject go in team.characterInstances)
+            {
+                CharacterInstance toAdd = go.GetComponent<CharacterInstance>();
+                if (toAdd && toAdd.characterData.IsAlive)
+                    toReturn.Add(toAdd);
+            }
+        }
+        return toReturn.ToArray();
+    }
+
+    public void WinGame(Team winningTeam)
+    {
+
     }
 
 }

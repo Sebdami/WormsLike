@@ -9,6 +9,8 @@ public class CharacterInstance : MonoBehaviour {
 
     public CharacterData characterData;
 
+    WormController controller;
+
     Text hpText;
     Text nameText;
 
@@ -25,16 +27,29 @@ public class CharacterInstance : MonoBehaviour {
         }
     }
 
-    public void InitUI()
+    public WormController Controller
     {
-        characterInfo.GetComponent<UIFollowCharacter>().character = this;
-        nameText = characterInfo.transform.GetChild(0).GetChild(0).GetComponent<Text>();
-        hpText = characterInfo.transform.GetChild(1).GetChild(0).GetComponent<Text>();
+        get
+        {
+            if (!controller)
+                controller = GetComponent<WormController>();
+            return controller;
+        }
 
-        nameText.text = characterData.CharacterName;
-        nameText.color = GameManager.instance.teams[characterData.Team].teamColor;
-        hpText.text = characterData.CurrentHp.ToString();
-        hpText.color = GameManager.instance.teams[characterData.Team].teamColor;
+        set
+        {
+            controller = value;
+        }
+    }
+
+    public void Select()
+    {
+        characterInfo.GetComponent<UICharacterInfo>().ToggleActiveMarker();
+    }
+
+    public void Deselect()
+    {
+        characterInfo.GetComponent<UICharacterInfo>().ToggleActiveMarker();
     }
 
     private void OnDestroy()

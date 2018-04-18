@@ -5,7 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Team {
     int id;
-
+    [SerializeField]
+    string teamName;
     public int Id
     {
         get
@@ -18,6 +19,20 @@ public class Team {
             id = value;
         }
     }
+
+    public string TeamName
+    {
+        get
+        {
+            return teamName;
+        }
+
+        set
+        {
+            teamName = value;
+        }
+    }
+
     [SerializeField]
     public Color teamColor;
 
@@ -48,8 +63,22 @@ public class Team {
         return sum;
     }
 
+    GameObject[] GetAliveCharacters()
+    {
+        return System.Array.FindAll<GameObject>(characterInstances, x => x.GetComponent<CharacterInstance>().characterData.IsAlive == true);
+    }
+
     public float GetTotalHealthPercent()
     {
         return (float)GetTotalCurrentHealth() / (float)GetTotalMaxHealth();
+    }
+
+    public bool IsTeamDead()
+    {
+        int deadCharacters = 0;
+        for (int i = 0; i < characters.Length; i++)
+            if (!characters[i].IsAlive)
+                deadCharacters++;
+        return deadCharacters == characters.Length;
     }
 }

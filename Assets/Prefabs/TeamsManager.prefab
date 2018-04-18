@@ -52,7 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teams:
-  - teamColor: {r: 1, g: 0.27205884, b: 0.27205884, a: 1}
+  - teamName: Cute Strawberries
+    teamColor: {r: 1, g: 0.27205884, b: 0.27205884, a: 1}
     characters:
     - characterName: Pompon
       maxHp: 100
@@ -67,7 +68,8 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
-  - teamColor: {r: 0.49411765, g: 0.47843137, b: 1, a: 1}
+  - teamName: Dark Ninjas
+    teamColor: {r: 0.49411765, g: 0.47843137, b: 1, a: 1}
     characters:
     - characterName: xXDeadWormzDu69Xx
       maxHp: 100
@@ -75,7 +77,7 @@ MonoBehaviour:
       maxHp: 100
     - characterName: _D4rKPwnz0R_
       maxHp: 100
-    - characterName: Jean
+    - characterName: XxXD4RK4NG3LXxX
       maxHp: 100
     characterInstances:
     - {fileID: 0}
