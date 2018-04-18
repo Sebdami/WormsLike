@@ -57,7 +57,7 @@ public class Team {
         int sum = 0;
         for (int i = 0; i < characters.Length; i++)
         {
-            sum += characters[i].CurrentHp;
+            sum += Mathf.Clamp(characters[i].CurrentHp, 0, characters[i].MaxHp);
         }
 
         return sum;

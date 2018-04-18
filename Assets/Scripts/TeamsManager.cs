@@ -15,6 +15,7 @@ public class TeamsManager : MonoBehaviour {
             copy[i] = new Team();
             copy[i].Id = i;
             copy[i].teamColor = teams[i].teamColor;
+            copy[i].TeamName = teams[i].TeamName;
             copy[i].characters = new CharacterData[teams[i].characters.Length];
             for (int j = 0; j < teams[i].characters.Length; j++)
             {

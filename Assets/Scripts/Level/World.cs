@@ -24,17 +24,19 @@ public class World : MonoBehaviour
 		for (int x=0; x<worldX; x++) {
 			for (int z=0; z<worldZ; z++) {
 				int stone = PerlinNoise (x, 0, z, 10, 3, 1.2f);
-				stone += PerlinNoise (x, 300, z, 20, 4, 0) + 10;
-				int dirt = PerlinNoise (x, 100, z, 50, 3, 0) + 1;
-     
-				for (int y=0; y<worldY; y++) {
+				stone += PerlinNoise (x, 300, z, 18, 4, 0) + 7;
+				int dirt = PerlinNoise (x, 200, z, 25, 4, 0) + 1;
+                int grass = PerlinNoise(x, 100, z, 48, 3, 0) + 1;
+                for (int y=0; y<worldY; y++) {
 					if (y <= stone) {
 						data [x, y, z] = 1;
 					} else if (y <= dirt + stone) {
 						data [x, y, z] = 2;
 					}
-      
-				}
+                    else if(y <= dirt + grass + stone)
+                        data[x, y, z] = 3;
+
+                }
 			}
 		}
    

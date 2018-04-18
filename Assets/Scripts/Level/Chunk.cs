@@ -14,7 +14,7 @@ public class Chunk : MonoBehaviour
 
     private float tUnitX = 1.0f/11.0f;
     private float tUnitY = 1.0f / 8.0f;
-    private Vector2 tStone = new Vector2(1, 3);
+    private Vector2 tStone = new Vector2(2, 1);
     private Vector2 tGrass = new Vector2(1, 6);
     private Vector2 tDirt = new Vector2(1, 3);
     private Vector2 tGrassTop = new Vector2(1, 6);
@@ -40,7 +40,7 @@ public class Chunk : MonoBehaviour
             update = false;
         }
     }
-    // Use this for initialization
+
     void Start()
     {
 
@@ -52,14 +52,6 @@ public class Chunk : MonoBehaviour
 
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-
 
     public void GenerateMesh()
     {
@@ -128,6 +120,24 @@ public class Chunk : MonoBehaviour
         return world.Block(x + chunkX, y + chunkY, z + chunkZ);
     }
 
+    Vector2 GetTexturePosFromBlock(byte block)
+    {
+        Vector2 texturePos = Vector2.zero;
+        if (block == 1)
+        {
+            texturePos = tStone;
+        }
+        else if (block == 2)
+        {
+            texturePos = tDirt;
+        }
+        else if (block == 3)
+        {
+            texturePos = tGrass;
+        }
+        return texturePos;
+    }
+
     void CubeTop(int x, int y, int z, byte block)
     {
 
@@ -136,16 +146,7 @@ public class Chunk : MonoBehaviour
         newVertices.Add(new Vector3(x + 1, y, z));
         newVertices.Add(new Vector3(x, y, z));
 
-        Vector2 texturePos = new Vector2(0, 0);
-
-        if (Block(x, y, z) == 1)
-        {
-            texturePos = tStone;
-        }
-        else if (Block(x, y, z) == 2)
-        {
-            texturePos = tGrassTop;
-        }
+        Vector2 texturePos = GetTexturePosFromBlock(Block(x, y, z));
 
         Cube(texturePos);
 
@@ -159,16 +160,7 @@ public class Chunk : MonoBehaviour
         newVertices.Add(new Vector3(x, y, z + 1));
         newVertices.Add(new Vector3(x, y - 1, z + 1));
 
-        Vector2 texturePos = new Vector2(0, 0);
-
-        if (Block(x, y, z) == 1)
-        {
-            texturePos = tStone;
-        }
-        else if (Block(x, y, z) == 2)
-        {
-            texturePos = tGrass;
-        }
+        Vector2 texturePos = GetTexturePosFromBlock(Block(x, y, z));
 
         Cube(texturePos);
 
@@ -182,16 +174,7 @@ public class Chunk : MonoBehaviour
         newVertices.Add(new Vector3(x + 1, y, z + 1));
         newVertices.Add(new Vector3(x + 1, y - 1, z + 1));
 
-        Vector2 texturePos = new Vector2(0, 0);
-
-        if (Block(x, y, z) == 1)
-        {
-            texturePos = tStone;
-        }
-        else if (Block(x, y, z) == 2)
-        {
-            texturePos = tGrass;
-        }
+        Vector2 texturePos = GetTexturePosFromBlock(Block(x, y, z));
 
         Cube(texturePos);
 
@@ -205,16 +188,7 @@ public class Chunk : MonoBehaviour
         newVertices.Add(new Vector3(x + 1, y, z));
         newVertices.Add(new Vector3(x + 1, y - 1, z));
 
-        Vector2 texturePos = new Vector2(0, 0);
-
-        if (Block(x, y, z) == 1)
-        {
-            texturePos = tStone;
-        }
-        else if (Block(x, y, z) == 2)
-        {
-            texturePos = tGrass;
-        }
+        Vector2 texturePos = GetTexturePosFromBlock(Block(x, y, z));
 
         Cube(texturePos);
 
@@ -228,16 +202,7 @@ public class Chunk : MonoBehaviour
         newVertices.Add(new Vector3(x, y, z));
         newVertices.Add(new Vector3(x, y - 1, z));
 
-        Vector2 texturePos = new Vector2(0, 0);
-
-        if (Block(x, y, z) == 1)
-        {
-            texturePos = tStone;
-        }
-        else if (Block(x, y, z) == 2)
-        {
-            texturePos = tGrass;
-        }
+        Vector2 texturePos = GetTexturePosFromBlock(Block(x, y, z));
 
         Cube(texturePos);
 
@@ -251,16 +216,7 @@ public class Chunk : MonoBehaviour
         newVertices.Add(new Vector3(x + 1, y - 1, z + 1));
         newVertices.Add(new Vector3(x, y - 1, z + 1));
 
-        Vector2 texturePos = new Vector2(0, 0);
-
-        if (Block(x, y, z) == 1)
-        {
-            texturePos = tStone;
-        }
-        else if (Block(x, y, z) == 2)
-        {
-            texturePos = tGrass;
-        }
+        Vector2 texturePos = GetTexturePosFromBlock(Block(x, y, z));
 
         Cube(texturePos);
 
