@@ -38,6 +38,7 @@ public class CharacterInstance : MonoBehaviour {
     public void Select()
     {
         characterInfo.GetComponent<UICharacterInfo>().ToggleActiveMarker();
+        characterInfo.transform.SetAsLastSibling();
     }
 
     public void Deselect()

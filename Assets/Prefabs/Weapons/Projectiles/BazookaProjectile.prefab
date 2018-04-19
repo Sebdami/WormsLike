@@ -261,9 +261,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 1
   explosion:
-    ExplosionRadius: 6
+    ExplosionRadius: 4
     ExplosionForce: 10
-    Damage: 50
+    maxDamage: 30
+    minDamage: 2
     DamageFalloff:
       serializedVersion: 2
       m_Curve:
