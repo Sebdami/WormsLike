@@ -362,6 +362,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e31429bdb85154046aa8aa9654d39ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wind: {x: 0, y: 0, z: 0}
+  windMultiplier: 4
   roundMaxTimer: 40
 --- !u!4 &758244110
 Transform:

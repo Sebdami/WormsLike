@@ -5,6 +5,12 @@ using UnityEngine;
 public class ExplosiveProjectile : Projectile {
     public Explosion explosion;
 
+    protected new void Start()
+    {
+        base.Start();
+        gameObject.AddComponent<ConstantForce>().force = GameManager.instance.roundHandler.wind * GameManager.instance.roundHandler.windMultiplier;
+    }
+
     public virtual void Explode()
     {
         GameManager.instance.world.GetComponent<ModifyTerrain>().SphereAtPosition(transform.position, explosion.ExplosionRadius, 0);

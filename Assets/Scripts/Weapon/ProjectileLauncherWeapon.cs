@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileLauncherWeapon : Weapon {
-
+    UIPowerBar uiPowerBar;
     [SerializeField]
     GameObject ProjectilePrefab;
     [SerializeField]
@@ -23,6 +23,12 @@ public class ProjectileLauncherWeapon : Weapon {
 
     bool isShooting = false;
     bool powerIsRising = true;
+
+    new void Start()
+    {
+        base.Start();
+        uiPowerBar = GameManager.instance.LevelCanvas.GetComponentInChildren<UIPowerBar>(true);
+    }
 
     protected void Update()
     {
@@ -48,13 +54,18 @@ public class ProjectileLauncherWeapon : Weapon {
                     currentLaunchTimer = 0.0f;
                 }
             }
-            if(Input.GetKeyUp(KeyCode.Space))
+
+            uiPowerBar.UpdateFillValue(currentLaunchTimer/launchMaxTime);
+
+            if (Input.GetKeyUp(KeyCode.Space))
             {
 
                 GameObject projectile = Instantiate(ProjectilePrefab, transform.GetChild(1).position, transform.GetChild(1).rotation);
                 StartCoroutine(DisableCollisionsForSeconds(projectile.GetComponent<Collider>(), GetComponentInParent<Collider>(), 0.5f));
                 projectile.GetComponent<ExplosiveProjectile>().Launch(projectile.transform.forward, Mathf.Lerp(minLaunchPower, maxLaunchPower, currentLaunchTimer / launchMaxTime));
                 isShooting = false;
+                uiPowerBar.UpdateFillValue(0.0f);
+                uiPowerBar.gameObject.SetActive(false);
             }
         }
         else
@@ -72,6 +83,8 @@ public class ProjectileLauncherWeapon : Weapon {
 
         if(Input.GetKeyDown(KeyCode.Space) && currentRoundUsesLeft > 0)
         {
+            uiPowerBar.UpdateFillValue(0.0f);
+            uiPowerBar.gameObject.SetActive(true);
             isShooting = true;
             currentLaunchPower = minLaunchPower;
             currentLaunchTimer = 0.0f;

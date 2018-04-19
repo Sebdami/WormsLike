@@ -8,6 +8,7 @@ public class BazookaProjectile : ExplosiveProjectile {
     private new void Start()
     {
         base.Start();
+        Destroy(gameObject, 10.0f);
     }
 
     public override void Explode()
@@ -18,6 +19,7 @@ public class BazookaProjectile : ExplosiveProjectile {
         Destroy(gameObject, 2.5f);
         GetComponent<Collider>().enabled = false;
         Destroy(GetComponent<Collider>());
+        Destroy(GetComponent<ConstantForce>());
         Destroy(GetComponent<Rigidbody>());
         Destroy(Instantiate(explosion.particleSystem, transform.position, Quaternion.identity), 2.0f);
     }

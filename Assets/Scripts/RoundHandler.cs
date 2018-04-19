@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RoundHandler : MonoBehaviour {
+    public delegate void RoundEvent();
+    public RoundEvent OnRoundChange;
     int teamAmount;
     int[] lastActivePlayerForTeam;
     int currentActiveTeam = 0;
     int currentActivePlayerIndex = 0;
     CharacterInstance currentActiveCharacter = null;
-
+    public Vector3 wind;
+    public float windMultiplier = 3.0f;
 
     [SerializeField]
     float roundMaxTimer = 5.0f;
@@ -71,6 +74,11 @@ public class RoundHandler : MonoBehaviour {
         }
     }
 
+    void ChangeWind()
+    {
+        wind = new Vector3(Random.Range(-3, 4), 0.0f, 0.0f);
+    }
+
     public int CurrentActiveTeam
     {
         get
@@ -108,11 +116,14 @@ public class RoundHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        ChangeWind();
         teamAmount = GameManager.instance.teams.Length;
         lastActivePlayerForTeam = new int[teamAmount];
         CurrentActiveTeam = 0;
         CurrentActivePlayerIndex = 0;
         roundTimer = roundMaxTimer;
+        if (OnRoundChange != null)
+            OnRoundChange();
         //currentActiveCharacter.Select();
     }
 
@@ -144,7 +155,9 @@ public class RoundHandler : MonoBehaviour {
         currentActiveCharacter.Controller.CurrentWeapon.ResetUses();
         SwitchPlayer();
         roundTimer = roundMaxTimer;
-        
+        ChangeWind();
+        if (OnRoundChange != null)
+            OnRoundChange();
     }
 
     void SwitchPlayer()
