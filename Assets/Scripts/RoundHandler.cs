@@ -11,7 +11,9 @@ public class RoundHandler : MonoBehaviour {
     int currentActivePlayerIndex = 0;
     CharacterInstance currentActiveCharacter = null;
     public Vector3 wind;
-    public float windMultiplier = 3.0f;
+    public float windMultiplier = 2.0f;
+
+    UIRoundAnouncer anouncer;
 
     [SerializeField]
     float roundMaxTimer = 5.0f;
@@ -41,6 +43,7 @@ public class RoundHandler : MonoBehaviour {
             currentController.OnStateChange += OnStateChange;
             currentController.GetComponent<CharacterInstance>().Select();
             currentActiveCharacter = currentController.GetComponent<CharacterInstance>();
+            anouncer.Anounce(currentActiveCharacter.characterData.CharacterName, GameManager.instance.teams[CurrentActiveTeam].teamColor);
         }
     }
 
@@ -117,6 +120,7 @@ public class RoundHandler : MonoBehaviour {
     // Use this for initialization
     void Start () {
         ChangeWind();
+        anouncer = GameManager.instance.LevelCanvas.GetComponentInChildren<UIRoundAnouncer>(true);
         teamAmount = GameManager.instance.teams.Length;
         lastActivePlayerForTeam = new int[teamAmount];
         CurrentActiveTeam = 0;
