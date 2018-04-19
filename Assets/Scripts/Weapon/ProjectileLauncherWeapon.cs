@@ -22,44 +22,31 @@ public class ProjectileLauncherWeapon : Weapon {
     float launchMaxTime = 1.0f;
 
     bool isShooting = false;
-    bool powerIsRising = true;
 
     new void Start()
     {
         base.Start();
         uiPowerBar = GameManager.instance.LevelCanvas.GetComponentInChildren<UIPowerBar>(true);
     }
-
+    bool forceShoot = false;
     protected void Update()
     {
         if (ownerController.CurrentState != WormState.Movement && ownerController.CurrentState != WormState.WeaponHandled)
             return;
         if(isShooting)
         {
-            if(powerIsRising)
+
+            currentLaunchTimer += Time.deltaTime;
+            if(currentLaunchTimer >= launchMaxTime + .25f)
             {
-                currentLaunchTimer += Time.deltaTime;
-                if(currentLaunchTimer >= launchMaxTime)
-                {
-                    powerIsRising = false;
-                    currentLaunchTimer = launchMaxTime;
-                }
-            }
-            else
-            {
-                currentLaunchTimer -= Time.deltaTime;
-                if (currentLaunchTimer <= 0)
-                {
-                    powerIsRising = true;
-                    currentLaunchTimer = 0.0f;
-                }
+                forceShoot = true;
             }
 
             uiPowerBar.UpdateFillValue(currentLaunchTimer/launchMaxTime);
 
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space) || forceShoot)
             {
-
+                forceShoot = false;
                 GameObject projectile = Instantiate(ProjectilePrefab, transform.GetChild(1).position, transform.GetChild(1).rotation);
                 StartCoroutine(DisableCollisionsForSeconds(projectile.GetComponent<Collider>(), GetComponentInParent<Collider>(), 0.5f));
                 projectile.GetComponent<ExplosiveProjectile>().Launch(projectile.transform.forward, Mathf.Lerp(minLaunchPower, maxLaunchPower, currentLaunchTimer / launchMaxTime));
@@ -88,7 +75,6 @@ public class ProjectileLauncherWeapon : Weapon {
             isShooting = true;
             currentLaunchPower = minLaunchPower;
             currentLaunchTimer = 0.0f;
-            powerIsRising = true;
             ownerController.CurrentState = WormState.WeaponHandled;
             currentRoundUsesLeft--;
         }
@@ -100,7 +86,6 @@ public class ProjectileLauncherWeapon : Weapon {
         currentLaunchTimer = 0.0f;
 
         isShooting = false;
-        powerIsRising = true;
     }
 
     IEnumerator DisableCollisionsForSeconds(Collider col1, Collider col2, float seconds)
