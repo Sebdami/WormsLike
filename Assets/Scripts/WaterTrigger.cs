@@ -5,6 +5,7 @@ using UnityEngine;
 public class WaterTrigger : MonoBehaviour {
     [SerializeField]
     GameObject SplashPrefab;
+
     private void OnTriggerEnter(Collider other)
     {
         CharacterInstance charInst = other.GetComponentInParent<CharacterInstance>();

@@ -309,6 +309,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4320712828824160}
+  - component: {fileID: 114192741935714410}
   m_Layer: 0
   m_Name: Water
   m_TagString: Untagged
@@ -569,7 +570,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1552115963742186}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 62.7, y: 0.7, z: -14.1}
+  m_LocalPosition: {x: 62.7, y: 0.61, z: -14.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4230371922314150}
@@ -849,6 +850,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SplashPrefab: {fileID: 1925672133032910, guid: 9e599a40444ebcf47b2cd39d2313f465,
     type: 2}
+  riseSpeed: 0.5
+--- !u!114 &114192741935714410
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1552115963742186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6462b0c09f41274c9bdb4b1c677e5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114964951241297220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -862,6 +875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SplashPrefab: {fileID: 1925672133032910, guid: 9e599a40444ebcf47b2cd39d2313f465,
     type: 2}
+  riseSpeed: 0.5
 --- !u!212 &212057868381193254
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject characterInfoPrefab;
 
+    public float gameMaxTime = 600f;
+    [HideInInspector]
+    public float gameTimer = 0.0f;
+
     public World world;
 
     public RoundHandler roundHandler;
@@ -28,6 +32,8 @@ public class GameManager : MonoBehaviour {
     WeaponDatabase weaponDatabase;
     [HideInInspector]
     public GameObject LevelCanvas;
+
+    Water water;
 
     public WeaponDatabase WeaponDb
     {
@@ -61,11 +67,13 @@ public class GameManager : MonoBehaviour {
             teams[i].TeamWeapons = WeaponDb.GetWeapons();
         }
         world = FindObjectOfType<World>();
+        water = FindObjectOfType<Water>();
         roundHandler = FindObjectOfType<RoundHandler>();
 	}
 
     private void Start()
     {
+        gameTimer = gameMaxTime;
         int posIndex = 0;
         foreach(Team team in teams)
         {
@@ -79,7 +87,43 @@ public class GameManager : MonoBehaviour {
                 currentInstance.characterInfo = Instantiate(characterInfoPrefab, LevelCanvas.transform);
                 currentInstance.characterInfo.GetComponent<UICharacterInfo>().Init(currentInstance);
                 currentInstance.GetComponent<WormController>().CurrentState = WormState.Paused;
+                currentInstance.characterData.OnDeath += CheckVictory;
             }
+        }
+    }
+    bool suddenDeath = false;
+    private void Update()
+    {
+        if(!suddenDeath)
+            gameTimer -= Time.deltaTime;
+        if(gameTimer <= 0 && !suddenDeath)
+        {
+            gameTimer = 0.0f;
+            suddenDeath = true;
+            water.StartRising();
+        }
+    }
+
+    public void CheckVictory()
+    {
+        List<Team> aliveTeams = new List<Team>(); 
+
+        for(int i = 0; i < teams.Length; i++)
+        {
+            if (!teams[i].IsTeamDead())
+                aliveTeams.Add(teams[i]);
+        }
+
+        if(aliveTeams.Count == 0)
+        {
+            Team noTeam = new Team();
+            noTeam.TeamName = "NO ONE";
+            noTeam.teamColor = Color.white;
+            WinGame(noTeam);
+        }
+        else if(aliveTeams.Count == 1)
+        {
+            WinGame(aliveTeams[0]);
         }
     }
 
