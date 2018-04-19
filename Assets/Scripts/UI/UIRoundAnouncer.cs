@@ -28,6 +28,7 @@ public class UIRoundAnouncer : MonoBehaviour {
     {
         if(isAnouncing)
         {
+            anouncementText.text = anouncementString;
             timer += Time.deltaTime;
             if(timer >= anouncementTime)
             {
@@ -63,6 +64,11 @@ public class UIRoundAnouncer : MonoBehaviour {
         anouncementString = "It's <color=#" + ColorUtility.ToHtmlStringRGBA(characterNameColor) + ">" + characterName + "</color>'s turn !";
     }
 
+    void FakeUpdateAnouncementString()
+    {
+        anouncementString = "It's <color=#" + ColorUtility.ToHtmlStringRGBA(backColor) + ">" + characterName + "</color>'s turn !";
+    }
+
 
     public void Anounce(string _characterName, Color teamColor)
     {
@@ -87,10 +93,23 @@ public class UIRoundAnouncer : MonoBehaviour {
 
         backColor.a = backTargetAlpha;
         textColor.a = 1.0f;
-
         back.color = backColor;
         anouncementText.color = textColor;
         isAnouncing = true;
+        transform.SetAsLastSibling();
+
+        // Need to use content size fitter manually for it to work properly
+
+        ContentSizeFitter fitter = anouncementText.GetComponent<ContentSizeFitter>();
+
+        fitter.enabled = true;
+        fitter.SetLayoutHorizontal();
+
+        fitter = back.GetComponent<ContentSizeFitter>();
+
+        fitter.enabled = true;
+        fitter.SetLayoutHorizontal();
+        
     }
 
 }

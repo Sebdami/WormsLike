@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
     public GameObject LevelCanvas;
 
     Water water;
-
+    SpawnPoints spawnpoints;
     public bool suddenDeath = false;
 
     public Sprite EmptySlotSprite;
@@ -71,13 +71,13 @@ public class GameManager : MonoBehaviour {
         }
         world = FindObjectOfType<World>();
         water = FindObjectOfType<Water>();
+        spawnpoints = FindObjectOfType<SpawnPoints>();
         roundHandler = FindObjectOfType<RoundHandler>();
 	}
 
     private void Start()
     {
         gameTimer = gameMaxTime;
-        int posIndex = 0;
         foreach(Team team in teams)
         {
             team.characterInstances = new GameObject[team.characters.Length];
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour {
             {
                 team.characterInstances[i] = Instantiate(characterPrefab);
                 CharacterInstance currentInstance = team.characterInstances[i].GetComponent<CharacterInstance>();
-                currentInstance.transform.position += Vector3.right* posIndex++;
+                currentInstance.transform.position = spawnpoints.GetRandomSpawnPoint();
                 currentInstance.characterData = team.characters[i];
                 currentInstance.characterInfo = Instantiate(characterInfoPrefab, LevelCanvas.transform);
                 currentInstance.characterInfo.GetComponent<UICharacterInfo>().Init(currentInstance);
