@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
@@ -99,7 +100,21 @@ public class GameManager : MonoBehaviour {
 
     public void WinGame(Team winningTeam)
     {
+        Time.timeScale = 0;
+        UIWinPanel winPanel = LevelCanvas.GetComponentInChildren<UIWinPanel>(true);
+        winPanel.UpdateVisual(winningTeam.TeamName, winningTeam.teamColor);
+        winPanel.gameObject.SetActive(true);
+    }
 
+    public void Restart()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void BackToMainMenu()
+    {
+        Application.Quit();
     }
 
 }
