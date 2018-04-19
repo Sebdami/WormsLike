@@ -26,6 +26,14 @@ public class UIInventory : MonoBehaviour {
         RoundChanged();
     }
 
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(1))
+        {
+            TogglePanelVisibility();
+        }
+    }
+
     void RoundChanged()
     {
         InitFromTeam(GameManager.instance.teams[Rh.CurrentActiveTeam]);
@@ -36,7 +44,7 @@ public class UIInventory : MonoBehaviour {
         int size = Mathf.Min(team.TeamWeapons.Length, 12);
         for(int i = 0; i < size; i++)
         {
-            transform.GetChild(i).GetComponent<UIWeaponSlot>().UpdateSlot(team.TeamWeapons[i]);
+            transform.GetChild(0).GetChild(i).GetComponent<UIWeaponSlot>().UpdateSlot(team.TeamWeapons[i]);
         }
     }
 
@@ -49,5 +57,10 @@ public class UIInventory : MonoBehaviour {
     private void OnDestroy()
     {
         Rh.OnRoundChange -= RoundChanged;
+    }
+
+    public void TogglePanelVisibility()
+    {
+        transform.GetChild(0).gameObject.SetActive(!transform.GetChild(0).gameObject.activeSelf);
     }
 }
