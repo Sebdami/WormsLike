@@ -110,7 +110,7 @@ public class RoundHandler : MonoBehaviour {
         bool ready = true;
         for(int i = 0; i < characters.Length; i++)
         {
-            if (characters[i].Controller.CurrentState == WormState.Hit || characters[i].Controller.CurrentState == WormState.WeaponHandled)
+            if (characters[i].Controller.CurrentState == WormState.Hit || characters[i].Controller.CurrentState == WormState.WeaponHandled || (characters[i].Controller.CurrentState != WormState.Dead && !characters[i].Controller.IsGrounded))
                 ready = false;
         }
 
@@ -140,7 +140,8 @@ public class RoundHandler : MonoBehaviour {
 
         if (roundTimer <= 0.0f)
         {
-            currentActiveCharacter.Controller.CurrentState = WormState.Paused;
+            if(currentActiveCharacter.Controller.CurrentState != WormState.Hit && currentActiveCharacter.Controller.CurrentState != WormState.Dead && currentActiveCharacter.Controller.IsGrounded)
+                currentActiveCharacter.Controller.CurrentState = WormState.Paused;
             if (IsEveryoneReady())
             {
                 NextRound();

@@ -44,6 +44,7 @@ public class WormController : MonoBehaviour {
     Vector3 jumpingForwardConstantForce = Vector3.forward* 1.5f;
 
     bool isJumping = false;
+    [SerializeField]
     bool isGrounded = false;
 
     CapsuleCollider capsuleCollider;
@@ -100,6 +101,14 @@ public class WormController : MonoBehaviour {
         }
     }
 
+    public bool IsGrounded
+    {
+        get
+        {
+            return isGrounded;
+        }
+    }
+
     void Start () {
         character = GetComponent<CharacterInstance>();
         character.characterData.OnDeath += Die;
@@ -112,6 +121,15 @@ public class WormController : MonoBehaviour {
     {
         CurrentState = WormState.Dead;
         character.characterInfo.SetActive(false);
+    }
+
+    void UpdateIsGrounded()
+    {
+        RaycastHit hit;
+
+        Physics.SphereCast(transform.position, 0.48f, Vector3.down, out hit, 1.1f, ~LayerMask.GetMask("WormTail"));
+
+        isGrounded = (hit.collider != null && hit.collider != capsuleCollider);
     }
 
     private void OnDrawGizmosSelected()
@@ -161,6 +179,7 @@ public class WormController : MonoBehaviour {
         switch(currentState)
         {
             case WormState.Paused:
+                HandlePausedStateFixed();
                 break;
             case WormState.Movement:
                 HandleMovementStateFixed();
@@ -226,6 +245,11 @@ public class WormController : MonoBehaviour {
     {
         Rb.constraints = basicConstraints;
     }
+
+    void HandlePausedStateFixed()
+    {
+        UpdateIsGrounded();
+    }
     #endregion
 
     #region MovementState
@@ -236,11 +260,7 @@ public class WormController : MonoBehaviour {
 
     void HandleMovementStateFixed()
     {
-        RaycastHit hit;
-
-        Physics.SphereCast(transform.position, 0.48f, Vector3.down, out hit, 1.1f, ~LayerMask.GetMask("WormTail"));
-
-        isGrounded = (hit.collider != null && hit.collider != capsuleCollider);
+        UpdateIsGrounded();
 
         if (isJumping)
         {
