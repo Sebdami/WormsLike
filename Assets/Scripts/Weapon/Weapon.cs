@@ -9,7 +9,7 @@ public class Weapon : MonoBehaviour {
 
     public int maxUsePerRound = 1;
     public int currentRoundUsesLeft;
-
+    public WeaponData weaponData;
     public WormController ownerController;
     protected void Start()
     {

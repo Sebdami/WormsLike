@@ -12,6 +12,6 @@ public class UIRoundTimer : MonoBehaviour {
     }
 	
 	void Update () {
-        timerText.text = ((int)roundHandler.RoundTimer).ToString();
+        timerText.text = ((int)roundHandler.RoundTimer+1).ToString();
 	}
 }

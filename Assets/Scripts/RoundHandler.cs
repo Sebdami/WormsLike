@@ -138,11 +138,14 @@ public class RoundHandler : MonoBehaviour {
         if (!hasUsedWeaponOnce && !hasBeenHit && currentActiveCharacter.Controller.CurrentState == WormState.Paused)
             currentActiveCharacter.Controller.CurrentState = WormState.Movement;
 
-        if (roundTimer <= 0.0f && IsEveryoneReady())
+        if (roundTimer <= 0.0f)
         {
-            NextRound();
+            currentActiveCharacter.Controller.CurrentState = WormState.Paused;
+            if (IsEveryoneReady())
+            {
+                NextRound();
+            }
         }
-
         if(Input.GetKeyDown(KeyCode.N) && !hasUsedWeaponOnce && !hasBeenHit) //Prevent from switching when weapon has been used or when hit
         {
             SwitchPlayer();
