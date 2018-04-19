@@ -5,20 +5,22 @@ using Object = UnityEngine.Object;
 
 public class World : MonoBehaviour
 {
-  
-	public GameObject chunk;
-	public Chunk[,,] chunks;  //Changed from public GameObject[,,] chunks;
-	public int chunkSizexy = 16;
+    public GameObject chunk;
+    public Chunk[,,] chunks;  //Changed from public GameObject[,,] chunks;
+    public int chunkSizexy = 16;
     public int chunkSizez = 6;
-	public byte[,,] data;
-	public int worldX = 16;
-	public int worldY = 16;
-	public int worldZ = 16;
-  
-	// Use this for initialization
-	void Start ()
+    public byte[,,] data;
+    public int worldX = 16;
+    public int worldY = 16;
+    public int worldZ = 16;
+
+    public AnimationCurve sideViewHeightModifier = new AnimationCurve(new Keyframe(0.0f, 0.0f, 0.5f, 0.5f), new Keyframe(0.5f, 1.0f, 0f, 0f), new Keyframe(1.0f, 0.0f, -0.5f, -0.5f));
+    public float heightMultiplier = 2.0f;
+    public AnimationCurve depthHeightModifier = new AnimationCurve(new Keyframe(0.0f, 0.0f, 1.0f, 1.0f), new Keyframe(0.5f, 1.0f, 0f, 0f), new Keyframe(1.0f, 0.0f, -1f, -1f));
+    public float slope = 3.0f;
+
+    void Start ()
 	{
-  
 		data = new byte[worldX, worldY, worldZ];
    
 		for (int x=0; x<worldX; x++) {
@@ -28,12 +30,14 @@ public class World : MonoBehaviour
 				int dirt = PerlinNoise (x, 200, z, 25, 4, 0) + 1;
                 int grass = PerlinNoise(x, 100, z, 48, 3, 0) + 1;
                 for (int y=0; y<worldY; y++) {
-					if (y <= stone) {
+                    float toEvaluate = y / sideViewHeightModifier.Evaluate((float)x / (float)worldX) / heightMultiplier + slope / depthHeightModifier.Evaluate((float)z / (float)worldZ);
+
+                    if (toEvaluate <= stone) {
 						data [x, y, z] = 1;
-					} else if (y <= dirt + stone) {
+					} else if (toEvaluate <= dirt + stone) {
 						data [x, y, z] = 2;
 					}
-                    else if(y <= dirt + grass + stone)
+                    else if(toEvaluate <= dirt + grass + stone)
                         data[x, y, z] = 3;
 
                 }
@@ -71,8 +75,10 @@ public class World : MonoBehaviour
   
 	int PerlinNoise (int x, int y, int z, float scale, float height, float power)
 	{
-        return (int)(Mathf.Pow((Mathf.PerlinNoise(x / scale, y / scale) * height), (2))+z/40.0f);
-	}
+        x /= 2;
+        return (int)(Mathf.Pow((Mathf.PerlinNoise(x / scale, y / scale) * (height)), (2))); //+z / 40.0f
+
+    }
     byte tmp;
 
     public bool isInBounds(int x, int y, int z)
