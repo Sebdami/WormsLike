@@ -270,7 +270,8 @@ public class WormController : MonoBehaviour {
         if (isGrounded && !isJumping)
         {
             float inputHorizontal = Input.GetAxisRaw("Horizontal");
-            Rb.AddForce(Vector3.right * inputHorizontal * moveSpeed);
+            if(!Input.GetKey(KeyCode.LeftShift))
+                Rb.AddForce(Vector3.right * inputHorizontal * moveSpeed);
             if (Mathf.Abs(inputHorizontal) > 0.1f)
             {
                 transform.eulerAngles = Vector3.up * (inputHorizontal > 0.0f ? 90f : -90f);
