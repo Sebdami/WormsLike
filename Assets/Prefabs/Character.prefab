@@ -634,7 +634,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1580520606361434}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.29, z: 1.67}
+  m_LocalPosition: {x: -0, y: 0.29, z: 0.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4756991432418468}
@@ -922,7 +922,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2807d9ab43f84c74eb2c5c03905b71b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBeingUsed: 0
+  maxUsePerRound: 1
+  currentRoundUsesLeft: 0
+  weaponData:
+    weaponName: 
+    weaponImage: {fileID: 0}
+    weaponPrefab: {fileID: 0}
+    maxAmmo: 0
+    infiniteAmmo: 0
+  ownerController: {fileID: 0}
   ProjectilePrefab: {fileID: 1148943817162086, guid: 34d6070b2fe20cf49b55a6fa9a5e42ca,
     type: 2}
   minLaunchPower: 5
@@ -946,6 +954,7 @@ MonoBehaviour:
   maxVelocityMagnitude: 2.5
   jumpCooldown: 1
   currentState: 1
+  isGrounded: 0
   maxHitTimeTimer: 3
 --- !u!136 &136013079606664366
 CapsuleCollider:

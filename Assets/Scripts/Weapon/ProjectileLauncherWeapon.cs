@@ -47,8 +47,9 @@ public class ProjectileLauncherWeapon : Weapon {
             if (Input.GetKeyUp(KeyCode.Space) || forceShoot)
             {
                 forceShoot = false;
+
                 GameObject projectile = Instantiate(ProjectilePrefab, transform.GetChild(1).position, transform.GetChild(1).rotation);
-                StartCoroutine(DisableCollisionsForSeconds(projectile.GetComponent<Collider>(), GetComponentInParent<Collider>(), 0.5f));
+                StartCoroutine(DisableCollisionsForSeconds(GetComponentInParent<WormController>().GetComponentsInChildren<Collider>(), projectile.GetComponent<Collider>(), 0.5f));
                 projectile.GetComponent<ExplosiveProjectile>().Launch(projectile.transform.forward, Mathf.Lerp(minLaunchPower, maxLaunchPower, currentLaunchTimer / launchMaxTime));
                 isShooting = false;
                 uiPowerBar.UpdateFillValue(0.0f);
@@ -88,11 +89,17 @@ public class ProjectileLauncherWeapon : Weapon {
         isShooting = false;
     }
 
-    IEnumerator DisableCollisionsForSeconds(Collider col1, Collider col2, float seconds)
+    IEnumerator DisableCollisionsForSeconds(Collider[] cols, Collider col2, float seconds)
     {
-        Physics.IgnoreCollision(col1, col2, true);
+        for(int i = 0; i < cols.Length; i++)
+        {
+            Physics.IgnoreCollision(cols[i], col2, true);
+        }
         yield return new WaitForSeconds(seconds);
-        if(col1 && col2)
-            Physics.IgnoreCollision(col1, col2, false);
+        for (int i = 0; i < cols.Length; i++)
+        {
+            if(cols[i] && col2)
+                Physics.IgnoreCollision(cols[i], col2, false);
+        }
     }
 }
