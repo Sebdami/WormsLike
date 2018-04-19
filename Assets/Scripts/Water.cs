@@ -7,6 +7,11 @@ public class Water : MonoBehaviour {
     public float riseSpeed = 0.1f;
     bool isRising = false;
 
+    private void Start()
+    {
+        isRising = false;
+    }
+
     public void StartRising()
     {
         isRising = true;
@@ -14,6 +19,7 @@ public class Water : MonoBehaviour {
 
     private void Update()
     {
+        if(isRising)
         transform.position += Vector3.up * Time.deltaTime * riseSpeed;
     }
 }
