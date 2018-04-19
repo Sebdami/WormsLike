@@ -11,7 +11,7 @@ public class WeaponData {
     string weaponName;
 
     [SerializeField]
-    Image weaponImage;
+    Sprite weaponImage;
 
     [SerializeField]
     GameObject weaponPrefab;
@@ -50,7 +50,7 @@ public class WeaponData {
         }
     }
 
-    public Image WeaponImage
+    public Sprite WeaponImage
     {
         get
         {
@@ -76,7 +76,7 @@ public class WeaponData {
         }
     }
 
-    public int MaxAmmo
+    public int StartingAmmo
     {
         get
         {

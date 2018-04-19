@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour {
     GameObject teamsManagerPrefab;
 
     [SerializeField]
+    GameObject weaponDatabasePrefab;
+
+    [SerializeField]
     GameObject characterPrefab;
     [SerializeField]
     GameObject characterInfoPrefab;
@@ -21,10 +24,26 @@ public class GameManager : MonoBehaviour {
 
     public RoundHandler roundHandler;
 
+    WeaponDatabase weaponDatabase;
     [HideInInspector]
     public GameObject LevelCanvas;
-    
-	void Awake () {
+
+    public WeaponDatabase WeaponDb
+    {
+        get
+        {
+            if (!weaponDatabase)
+                weaponDatabase = weaponDatabasePrefab.GetComponent<WeaponDatabase>();
+            return weaponDatabase;
+        }
+
+        set
+        {
+            weaponDatabase = value;
+        }
+    }
+
+    void Awake () {
 		if(!instance)
         {
             instance = this;
@@ -36,6 +55,10 @@ public class GameManager : MonoBehaviour {
 
         LevelCanvas = Instantiate(levelCanvasPrefab);
         teams = teamsManagerPrefab.GetComponent<TeamsManager>().GetInitializedTeams();
+        for(int i = 0; i < teams.Length; i++)
+        {
+            teams[i].TeamWeapons = WeaponDb.GetWeapons();
+        }
         world = FindObjectOfType<World>();
         roundHandler = FindObjectOfType<RoundHandler>();
 	}

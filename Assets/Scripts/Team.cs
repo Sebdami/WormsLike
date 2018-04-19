@@ -7,6 +7,9 @@ public class Team {
     int id;
     [SerializeField]
     string teamName;
+
+    WeaponData[] teamWeapons;
+
     public int Id
     {
         get
@@ -30,6 +33,19 @@ public class Team {
         set
         {
             teamName = value;
+        }
+    }
+
+    public WeaponData[] TeamWeapons
+    {
+        get
+        {
+            return teamWeapons;
+        }
+
+        set
+        {
+            teamWeapons = value;
         }
     }
 

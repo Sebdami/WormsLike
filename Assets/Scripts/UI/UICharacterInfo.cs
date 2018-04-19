@@ -23,6 +23,7 @@ public class UICharacterInfo : MonoBehaviour {
         hpText.text = character.characterData.CurrentHp.ToString();
         hpText.color = GameManager.instance.teams[character.characterData.Team].teamColor;
         character.characterData.OnHealthChange += UpdateHp;
+        transform.GetChild(2).GetChild(1).GetComponent<Image>().color = nameText.color;
     }
 
     private void UpdateHp(int diff)
