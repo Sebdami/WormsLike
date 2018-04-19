@@ -11,4 +11,19 @@ public class Explosion
     public AnimationCurve DamageFalloff = AnimationCurve.Linear(0.0f, 1.0f, 1.0f, 0.0f);
     public float UpLiftForce = 2.0f;
     public ParticleSystem particleSystem;
+
+    public void Explode(Vector3 position)
+    {
+        GameManager.instance.world.GetComponent<ModifyTerrain>().SphereAtPosition(position, ExplosionRadius, 0);
+        Collider[] affectedColliders = Physics.OverlapSphere(position, ExplosionRadius, LayerMask.GetMask("Worm"));
+        foreach (Collider col in affectedColliders)
+        {
+            col.GetComponent<WormController>().CurrentState = WormState.Hit;
+            float damageFallOffMultiplier = DamageFalloff.Evaluate(Vector3.Distance(position, col.transform.position) / ExplosionRadius);
+
+            col.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce * damageFallOffMultiplier, position, ExplosionRadius, UpLiftForce * damageFallOffMultiplier, ForceMode.Impulse);
+            // Apply damage with falloff
+            col.GetComponent<CharacterInstance>().CurrentHp -= (int)(Damage * damageFallOffMultiplier);
+        }
+    }
 }
