@@ -37,8 +37,6 @@ public class WormController : MonoBehaviour {
 
     WormState previousState;
 
-    private Weapon currentWeapon;
-
     float jumpTimer = 0.0f;
 
     Vector3 jumpingForwardConstantForce = Vector3.forward* 1.5f;
@@ -83,21 +81,6 @@ public class WormController : MonoBehaviour {
         set
         {
             rb = value;
-        }
-    }
-
-    public Weapon CurrentWeapon
-    {
-        get
-        {
-            if (!currentWeapon)
-                currentWeapon = GetComponentInChildren<Weapon>();
-            return currentWeapon;
-        }
-
-        set
-        {
-            currentWeapon = value;
         }
     }
 
@@ -236,7 +219,6 @@ public class WormController : MonoBehaviour {
     #region PausedState
     void EnterPausedState()
     {
-        // Set the mass to a high value so you can't be pushed
         Rb.constraints = pausedConstraints;
         transform.eulerAngles = Vector3.up * (transform.forward.x > 0 ? 90 : -90);
     }
@@ -327,7 +309,7 @@ public class WormController : MonoBehaviour {
     void HandleHitState()
     {
         hitTimeTimer += Time.deltaTime;
-        if(hitTimeTimer >= maxHitTimeTimer && Rb.velocity.magnitude < 0.1f)
+        if((hitTimeTimer >= maxHitTimeTimer && Rb.velocity.magnitude < 0.1f) || hitTimeTimer >= maxHitTimeTimer + 4.0f)
         {
             if (previousState == WormState.WeaponHandled)
                 CurrentState = WormState.Movement;

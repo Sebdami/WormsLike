@@ -62,6 +62,10 @@ MonoBehaviour:
     type: 2}
   characterInfoPrefab: {fileID: 1708208128810626, guid: 1e2e7e9a7e9348f4dafcbc345571716c,
     type: 2}
+  gameMaxTime: 600
+  gameTimer: 0
   world: {fileID: 0}
   roundHandler: {fileID: 0}
   LevelCanvas: {fileID: 0}
+  suddenDeath: 0
+  EmptySlotSprite: {fileID: 21300000, guid: 97c8c594d72302943b35fc9b3e082162, type: 3}

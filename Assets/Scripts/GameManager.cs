@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour {
 
     Water water;
 
+    public bool suddenDeath = false;
+
+    public Sprite EmptySlotSprite;
     public WeaponDatabase WeaponDb
     {
         get
@@ -91,7 +94,7 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
-    bool suddenDeath = false;
+    
     private void Update()
     {
         if(!suddenDeath)
@@ -144,10 +147,12 @@ public class GameManager : MonoBehaviour {
 
     public void WinGame(Team winningTeam)
     {
+        LevelCanvas.GetComponentInChildren<UIRoundAnouncer>().enabled = false;
         Time.timeScale = 0;
         UIWinPanel winPanel = LevelCanvas.GetComponentInChildren<UIWinPanel>(true);
         winPanel.UpdateVisual(winningTeam.TeamName, winningTeam.teamColor);
         winPanel.gameObject.SetActive(true);
+        winPanel.transform.SetAsLastSibling();
     }
 
     public void Restart()

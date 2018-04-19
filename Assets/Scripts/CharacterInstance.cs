@@ -4,12 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterInstance : MonoBehaviour {
+    public delegate void WeaponChangeEvent(WeaponData weapon);
+    public WeaponChangeEvent OnWeaponChanged;
 
     public GameObject characterInfo;
 
     public CharacterData characterData;
 
     WormController controller;
+
+    WeaponSocket weaponSocket;
+
+    private Weapon currentWeapon;
+    private WeaponData currentWeaponData;
+
 
     public int CurrentHp
     {
@@ -32,6 +40,56 @@ public class CharacterInstance : MonoBehaviour {
         set
         {
             controller = value;
+        }
+    }
+
+    public Weapon CurrentWeapon
+    {
+        get
+        {
+            return currentWeapon;
+        }
+
+        set
+        {
+            currentWeapon = value;
+        }
+    }
+
+    public WeaponSocket WeaponSocket
+    {
+        get
+        {
+            if (!weaponSocket)
+                weaponSocket = GetComponentInChildren<WeaponSocket>();
+            return weaponSocket;
+        }
+
+        set
+        {
+            weaponSocket = value;
+        }
+    }
+
+    public WeaponData CurrentWeaponData
+    {
+        get
+        {
+            return currentWeaponData;
+        }
+
+        set
+        {
+            while (WeaponSocket.transform.childCount > 0)
+                DestroyImmediate(WeaponSocket.transform.GetChild(0).gameObject);
+
+            currentWeaponData = value;
+            Weapon toApply = Instantiate(currentWeaponData.WeaponPrefab, WeaponSocket.transform).GetComponent<Weapon>();
+            toApply.transform.localPosition = Vector3.zero;
+            toApply.transform.localRotation = Quaternion.identity;
+            CurrentWeapon = toApply;
+            if (OnWeaponChanged != null)
+                OnWeaponChanged(currentWeaponData);
         }
     }
 

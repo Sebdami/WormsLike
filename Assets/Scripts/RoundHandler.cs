@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class RoundHandler : MonoBehaviour {
     public delegate void RoundEvent();
+    public delegate void PlayerChangeEvent(CharacterInstance oldCharacter, CharacterInstance newCharacter);
     public RoundEvent OnRoundChange;
+    public PlayerChangeEvent OnCurrentPlayerChange;
     int teamAmount;
     int[] lastActivePlayerForTeam;
     int currentActiveTeam = 0;
@@ -20,8 +22,8 @@ public class RoundHandler : MonoBehaviour {
 
     float roundTimer = 0.0f;
 
-    bool hasUsedWeaponOnce = false;
-    bool hasBeenHit = false;
+    public bool hasUsedWeaponOnce = false;
+    public bool hasBeenHit = false;
     public int CurrentActivePlayerIndex
     {
         get
@@ -31,19 +33,24 @@ public class RoundHandler : MonoBehaviour {
 
         set
         {
+            CharacterInstance oldCharacterInstance = CurrentActiveCharacter;
             WormController currentController = GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>();
             currentController.CurrentState = currentController.CurrentState == WormState.Dead ? WormState.Dead : WormState.Paused;
             currentController.OnStateChange -= OnStateChange;
-            if(currentActiveCharacter)
-                currentActiveCharacter.Deselect();
+            if(CurrentActiveCharacter)
+                CurrentActiveCharacter.Deselect();
             currentActivePlayerIndex = value;
             GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>().CurrentState = WormState.Movement;
 
             currentController = GameManager.instance.teams[CurrentActiveTeam].characterInstances[currentActivePlayerIndex].GetComponent<WormController>();
             currentController.OnStateChange += OnStateChange;
             currentController.GetComponent<CharacterInstance>().Select();
-            currentActiveCharacter = currentController.GetComponent<CharacterInstance>();
-            anouncer.Anounce(currentActiveCharacter.characterData.CharacterName, GameManager.instance.teams[CurrentActiveTeam].teamColor);
+            CurrentActiveCharacter = currentController.GetComponent<CharacterInstance>();
+            anouncer.Anounce(CurrentActiveCharacter.characterData.CharacterName, GameManager.instance.teams[CurrentActiveTeam].teamColor);
+            if(OnCurrentPlayerChange != null)
+            {
+                OnCurrentPlayerChange(oldCharacterInstance, CurrentActiveCharacter);
+            }
         }
     }
 
@@ -52,7 +59,7 @@ public class RoundHandler : MonoBehaviour {
         // Disable weapon if current character gets hit
         if(newState == WormState.Hit)
         {
-            currentActiveCharacter.Controller.CurrentWeapon.currentRoundUsesLeft = 0;
+            CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft = 0;
             hasBeenHit = true;
         }
         if(newState == WormState.Dead)
@@ -65,7 +72,7 @@ public class RoundHandler : MonoBehaviour {
             hasUsedWeaponOnce = true;
         }
 
-        if(oldState == WormState.WeaponHandled && currentActiveCharacter.Controller.CurrentWeapon.currentRoundUsesLeft <= 0)
+        if(oldState == WormState.WeaponHandled && CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft <= 0)
         {
             roundTimer = 5.0f;
         }
@@ -73,7 +80,7 @@ public class RoundHandler : MonoBehaviour {
         {
             // Round finished, prevent movements while waiting for everyone to settle
             roundTimer = 0.0f;
-            currentActiveCharacter.Controller.CurrentState = WormState.Paused;
+            CurrentActiveCharacter.Controller.CurrentState = WormState.Paused;
         }
     }
 
@@ -104,6 +111,19 @@ public class RoundHandler : MonoBehaviour {
         }
     }
 
+    public CharacterInstance CurrentActiveCharacter
+    {
+        get
+        {
+            return currentActiveCharacter;
+        }
+
+        set
+        {
+            currentActiveCharacter = value;
+        }
+    }
+
     bool IsEveryoneReady()
     {
         CharacterInstance[] characters = GameManager.instance.GetAliveCharacters();
@@ -130,23 +150,39 @@ public class RoundHandler : MonoBehaviour {
             OnRoundChange();
         //currentActiveCharacter.Select();
     }
-
+    //Force round change after 8 secs of waiting
+    float maxWaitTime = 8.0f;
+    float waitTimer = 0.0f;
+    bool isWaiting = false;
 	void Update () {
         if(roundTimer > 0.0f)
         roundTimer -= Time.deltaTime;
 
-        if (!hasUsedWeaponOnce && !hasBeenHit && currentActiveCharacter.Controller.CurrentState == WormState.Paused)
-            currentActiveCharacter.Controller.CurrentState = WormState.Movement;
+        if (!hasUsedWeaponOnce && !hasBeenHit && CurrentActiveCharacter.Controller.CurrentState == WormState.Paused)
+            CurrentActiveCharacter.Controller.CurrentState = WormState.Movement;
 
+        if(isWaiting)
+        {
+            waitTimer += Time.deltaTime;
+        }
         if (roundTimer <= 0.0f)
         {
-            if(currentActiveCharacter.Controller.CurrentState != WormState.Hit && currentActiveCharacter.Controller.CurrentState != WormState.Dead && currentActiveCharacter.Controller.IsGrounded)
-                currentActiveCharacter.Controller.CurrentState = WormState.Paused;
-            if (IsEveryoneReady())
+            if(!isWaiting)
             {
+                isWaiting = true;
+                waitTimer = 0.0f;
+            }
+            if (CurrentActiveCharacter.Controller.CurrentState != WormState.Hit && CurrentActiveCharacter.Controller.CurrentState != WormState.Dead && CurrentActiveCharacter.Controller.IsGrounded)
+                CurrentActiveCharacter.Controller.CurrentState = WormState.Paused;
+            if (IsEveryoneReady() || waitTimer > maxWaitTime)
+            {
+                isWaiting = false;
+                waitTimer = 0.0f;
                 NextRound();
             }
         }
+        else if (isWaiting)
+            isWaiting = false;
         if(Input.GetKeyDown(KeyCode.N) && !hasUsedWeaponOnce && !hasBeenHit) //Prevent from switching when weapon has been used or when hit
         {
             SwitchPlayer();
@@ -160,7 +196,7 @@ public class RoundHandler : MonoBehaviour {
         CurrentActiveTeam = (CurrentActiveTeam + 1) % teamAmount;
         currentActivePlayerIndex = lastActivePlayerForTeam[CurrentActiveTeam];
         //Reset Weapon use for everyone
-        currentActiveCharacter.Controller.CurrentWeapon.ResetUses();
+        CurrentActiveCharacter.CurrentWeapon.ResetUses();
         SwitchPlayer();
         roundTimer = roundMaxTimer;
         ChangeWind();
