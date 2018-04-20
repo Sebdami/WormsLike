@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 0e1c2f66942c52b41b791b8b3f89db44
+timeCreated: 1524221019
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Comix Loud
+  fontNames:
+  - Comix Loud
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
