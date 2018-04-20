@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
     public Sprite EmptySlotSprite;
 
     public UIInventory inventory;
+    public bool isFinished = false;
 
     public WeaponDatabase WeaponDb
     {
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour {
         spawnpoints = FindObjectOfType<SpawnPoints>();
         roundHandler = FindObjectOfType<RoundHandler>();
         inventory = FindObjectOfType<UIInventory>();
+        isFinished = false;
 	}
 
     private void Start()
@@ -152,6 +154,7 @@ public class GameManager : MonoBehaviour {
 
     public void WinGame(Team winningTeam)
     {
+        isFinished = true;
         LevelCanvas.GetComponentInChildren<UIRoundAnouncer>().gameObject.SetActive(false);
         UICharacterInfo[] characterInfos = LevelCanvas.GetComponentsInChildren<UICharacterInfo>();
         foreach(UICharacterInfo cha in characterInfos)

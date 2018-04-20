@@ -28,7 +28,7 @@ public class UIInventory : MonoBehaviour {
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(1))
+        if(Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.I))
         {
             TogglePanelVisibility();
         }
