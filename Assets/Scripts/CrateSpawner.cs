@@ -31,7 +31,7 @@ public class CrateSpawner : MonoBehaviour {
 
     void Start () {
         minX = 4.0f;
-        maxX = GameManager.instance.world.worldX - 4.0f;
+        maxX = GameManager.instance.world.worldX * GameManager.instance.world.transform.localScale.x - 4.0f;
         StartCoroutine(SpawnWeaponCrateEvery(weaponCrateSpawnInterval, weaponCrateSpawnOffset));
         StartCoroutine(SpawnHealingCrateEvery(weaponCrateSpawnInterval, healingCrateSpawnOffset));
     }

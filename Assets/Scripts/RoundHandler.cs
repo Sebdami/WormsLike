@@ -213,12 +213,18 @@ public class RoundHandler : MonoBehaviour {
     void SwitchPlayer()
     {
         int teamCharactersAmount = GameManager.instance.teams[CurrentActiveTeam].characters.Length;
+        bool found = false;
         for (int i = 1; i < teamCharactersAmount; i++)
         {
             if(GameManager.instance.teams[CurrentActiveTeam].characters[(i + CurrentActivePlayerIndex)% teamCharactersAmount].IsAlive)
             {
                 CurrentActivePlayerIndex = (i + CurrentActivePlayerIndex) % teamCharactersAmount;
+                found = true;
                 break;
+            }
+            if(i == teamCharactersAmount-1 && !found)
+            {
+                CurrentActivePlayerIndex = currentActivePlayerIndex;
             }
         }
 
