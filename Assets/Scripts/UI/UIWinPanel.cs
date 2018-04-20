@@ -12,6 +12,13 @@ public class UIWinPanel : MonoBehaviour {
             teamText = transform.GetChild(1).GetChild(0).GetComponent<Text>();
         teamText.text = teamName;
         teamText.color = teamColor;
+        ContentSizeFitter fitter = teamText.GetComponent<ContentSizeFitter>();
+        fitter.enabled = true;
+        fitter.SetLayoutHorizontal();
+
+        fitter = transform.GetChild(1).GetChild(1).GetComponent<ContentSizeFitter>();
+        fitter.enabled = true;
+        fitter.SetLayoutHorizontal();
     }
 
     public void Restart()

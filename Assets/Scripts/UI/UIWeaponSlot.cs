@@ -79,7 +79,8 @@ public class UIWeaponSlot : MonoBehaviour {
         }
         else
         {
-            if(weapon.InfiniteAmmo)
+            SlotButton.interactable = true;
+            if (weapon.InfiniteAmmo)
             {
                 TextAmount.gameObject.SetActive(false);
                 TextInfinite.gameObject.SetActive(true);
@@ -104,5 +105,6 @@ public class UIWeaponSlot : MonoBehaviour {
         TextInfinite.gameObject.SetActive(false);
         SlotButton.GetComponent<Image>().sprite = GameManager.instance.EmptySlotSprite;
         SlotButton.onClick.RemoveAllListeners();
+        SlotButton.interactable = true;
     }
 }

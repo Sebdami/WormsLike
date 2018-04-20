@@ -147,7 +147,12 @@ public class GameManager : MonoBehaviour {
 
     public void WinGame(Team winningTeam)
     {
-        LevelCanvas.GetComponentInChildren<UIRoundAnouncer>().enabled = false;
+        LevelCanvas.GetComponentInChildren<UIRoundAnouncer>().gameObject.SetActive(false);
+        UICharacterInfo[] characterInfos = LevelCanvas.GetComponentsInChildren<UICharacterInfo>();
+        foreach(UICharacterInfo cha in characterInfos)
+        {
+            cha.gameObject.SetActive(false);
+        }
         Time.timeScale = 0;
         UIWinPanel winPanel = LevelCanvas.GetComponentInChildren<UIWinPanel>(true);
         winPanel.UpdateVisual(winningTeam.TeamName, winningTeam.teamColor);

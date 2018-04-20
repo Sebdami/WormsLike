@@ -86,7 +86,7 @@ public class UICurrentWeapon : MonoBehaviour {
     public void UpdateWeapon(WeaponData weapon)
     {
         weaponData = weapon;
-        if (weaponData == null)
+        if (weaponData == null || (weaponData.CurrentAmmo == 0 && !weaponData.InfiniteAmmo))
         {
             ResetSlot();
         }

@@ -29,10 +29,9 @@ public class ProjectileLauncherWeapon : Weapon {
         uiPowerBar = GameManager.instance.LevelCanvas.GetComponentInChildren<UIPowerBar>(true);
     }
     bool forceShoot = false;
-    protected void Update()
+    protected new void Update()
     {
-        if (ownerController.CurrentState != WormState.Movement && ownerController.CurrentState != WormState.WeaponHandled)
-            return;
+        base.Update();
         if(isShooting)
         {
 
@@ -44,16 +43,9 @@ public class ProjectileLauncherWeapon : Weapon {
 
             uiPowerBar.UpdateFillValue(currentLaunchTimer/launchMaxTime);
 
-            if (Input.GetKeyUp(KeyCode.Space) || forceShoot)
+            if (forceShoot)
             {
-                forceShoot = false;
-
-                GameObject projectile = Instantiate(ProjectilePrefab, transform.GetChild(1).position, transform.GetChild(1).rotation);
-                StartCoroutine(DisableCollisionsForSeconds(GetComponentInParent<WormController>().GetComponentsInChildren<Collider>(), projectile.GetComponent<Collider>(), 0.5f));
-                projectile.GetComponent<ExplosiveProjectile>().Launch(projectile.transform.forward, Mathf.Lerp(minLaunchPower, maxLaunchPower, currentLaunchTimer / launchMaxTime));
-                isShooting = false;
-                uiPowerBar.UpdateFillValue(0.0f);
-                uiPowerBar.gameObject.SetActive(false);
+                Shoot();
             }
         }
         else
@@ -63,21 +55,49 @@ public class ProjectileLauncherWeapon : Weapon {
                 ownerController.CurrentState = WormState.Movement;
             }
         }
+
         transform.Rotate(-Vector3.right * Input.GetAxisRaw("Vertical") * rotationSpeed * Time.deltaTime);
         currentAngle = transform.localEulerAngles.x;
         currentAngle = (currentAngle > 180) ? currentAngle - 360 : currentAngle;
         currentAngle = Mathf.Clamp(currentAngle, -maxAngleUp, maxAngleDown);
         transform.localEulerAngles = new Vector3(currentAngle, transform.localEulerAngles.y, transform.localEulerAngles.z);
+    }
 
-        if(Input.GetKeyDown(KeyCode.Space) && currentRoundUsesLeft > 0)
+    protected override void OnUseKeyPressed()
+    {
+        base.OnUseKeyPressed();
+        StartShooting();
+    }
+
+    protected override void OnUseKeyReleased()
+    {
+        base.OnUseKeyReleased();
+        Shoot();
+    }
+
+    void StartShooting()
+    {
+        uiPowerBar.UpdateFillValue(0.0f);
+        uiPowerBar.gameObject.SetActive(true);
+        isShooting = true;
+        currentLaunchPower = minLaunchPower;
+        currentLaunchTimer = 0.0f;
+        ownerController.CurrentState = WormState.WeaponHandled;
+        DecreaseAmmo();
+    }
+
+    void Shoot()
+    {
+        if (isShooting)
         {
+            forceShoot = false;
+
+            GameObject projectile = Instantiate(ProjectilePrefab, transform.GetChild(1).position, transform.GetChild(1).rotation);
+            StartCoroutine(DisableCollisionsForSeconds(GetComponentInParent<WormController>().GetComponentsInChildren<Collider>(), projectile.GetComponent<Collider>(), 0.5f));
+            projectile.GetComponent<ExplosiveProjectile>().Launch(projectile.transform.forward, Mathf.Lerp(minLaunchPower, maxLaunchPower, currentLaunchTimer / launchMaxTime));
+            isShooting = false;
             uiPowerBar.UpdateFillValue(0.0f);
-            uiPowerBar.gameObject.SetActive(true);
-            isShooting = true;
-            currentLaunchPower = minLaunchPower;
-            currentLaunchTimer = 0.0f;
-            ownerController.CurrentState = WormState.WeaponHandled;
-            currentRoundUsesLeft--;
+            uiPowerBar.gameObject.SetActive(false);
         }
     }
 

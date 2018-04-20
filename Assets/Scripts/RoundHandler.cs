@@ -196,7 +196,8 @@ public class RoundHandler : MonoBehaviour {
         CurrentActiveTeam = (CurrentActiveTeam + 1) % teamAmount;
         currentActivePlayerIndex = lastActivePlayerForTeam[CurrentActiveTeam];
         //Reset Weapon use for everyone
-        CurrentActiveCharacter.CurrentWeapon.ResetUses();
+        if(CurrentActiveCharacter.CurrentWeapon)
+            CurrentActiveCharacter.CurrentWeapon.ResetUses();
         SwitchPlayer();
         roundTimer = roundMaxTimer;
         ChangeWind();

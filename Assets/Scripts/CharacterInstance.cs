@@ -16,7 +16,8 @@ public class CharacterInstance : MonoBehaviour {
     WeaponSocket weaponSocket;
 
     private Weapon currentWeapon;
-    private WeaponData currentWeaponData;
+
+    private WeaponData currentWeaponData = null;
 
 
     public int CurrentHp
@@ -80,6 +81,13 @@ public class CharacterInstance : MonoBehaviour {
 
         set
         {
+            if(currentWeaponData == value)
+            {
+                if (OnWeaponChanged != null)
+                    OnWeaponChanged(currentWeaponData);
+                return;
+            }
+
             while (WeaponSocket.transform.childCount > 0)
                 DestroyImmediate(WeaponSocket.transform.GetChild(0).gameObject);
 
@@ -88,6 +96,7 @@ public class CharacterInstance : MonoBehaviour {
             toApply.transform.localPosition = Vector3.zero;
             toApply.transform.localRotation = Quaternion.identity;
             CurrentWeapon = toApply;
+            CurrentWeapon.weaponData = currentWeaponData;
             if (OnWeaponChanged != null)
                 OnWeaponChanged(currentWeaponData);
         }

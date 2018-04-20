@@ -58,3 +58,9 @@ MonoBehaviour:
       type: 2}
     maxAmmo: 0
     infiniteAmmo: 1
+  - weaponName: Dynamite
+    weaponImage: {fileID: 21300000, guid: dee26038040a8004296055ad9cc9d82c, type: 3}
+    weaponPrefab: {fileID: 1310598801317292, guid: e596d85b5d1b87547b1f899da8c8ed5f,
+      type: 2}
+    maxAmmo: 2
+    infiniteAmmo: 0

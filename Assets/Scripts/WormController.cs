@@ -266,20 +266,19 @@ public class WormController : MonoBehaviour {
             // Don't clamp on Y
             Rb.velocity = new Vector3(Rb.velocity.x, oldY, Rb.velocity.z);
 
+            //Long jump
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                Vector3 forceToAdd;
-
-                //Jump with less forward momentum if against a wall
-                if (Physics.Raycast(transform.position, transform.forward, 0.6f))
-                {
-                    forceToAdd = (Vector3.up * 2.2f + Vector3.forward * 0.2f);
-                }
-                else
-                {
-                    forceToAdd = (Vector3.up * 2.0f + Vector3.forward);
-                }
-
+                Vector3 forceToAdd = (Vector3.up * 2.0f + Vector3.forward);
+                Rb.velocity = Vector3.zero;
+                Rb.AddRelativeForce(forceToAdd * jumpForce, ForceMode.VelocityChange);
+                isGrounded = false;
+                isJumping = true;
+            }
+            //High jump
+            else if (Input.GetKeyDown(KeyCode.Backspace)) 
+            {
+                Vector3 forceToAdd = (Vector3.up * 2.2f + Vector3.forward * 0.2f);
                 Rb.velocity = Vector3.zero;
                 Rb.AddRelativeForce(forceToAdd * jumpForce, ForceMode.VelocityChange);
                 isGrounded = false;
