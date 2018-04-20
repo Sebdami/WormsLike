@@ -173,7 +173,8 @@ public class GameManager : MonoBehaviour {
 
     public void BackToMainMenu()
     {
-        Application.Quit();
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
     }
 
 }
