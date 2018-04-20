@@ -23,4 +23,16 @@ public class WeaponDatabase : MonoBehaviour {
         }
         return copy;
     }
+
+    public int GetRandomPickableWeaponIndex()
+    {
+        List<int> pickableWeapons = new List<int>();
+        for(int i = 0; i < weapons.Length; i++)
+        {
+            if (!weapons[i].InfiniteAmmo)
+                pickableWeapons.Add(i);
+        }
+
+        return pickableWeapons[Random.Range(0, pickableWeapons.Count)];
+    }
 }

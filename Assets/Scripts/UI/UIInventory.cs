@@ -39,10 +39,20 @@ public class UIInventory : MonoBehaviour {
         InitFromTeam(GameManager.instance.teams[Rh.CurrentActiveTeam]);
     }
 
-    void InitFromTeam(Team team)
+    public void InitFromTeam(Team team)
     {
         int size = Mathf.Min(team.TeamWeapons.Length, 12);
         for(int i = 0; i < size; i++)
+        {
+            transform.GetChild(0).GetChild(i).GetComponent<UIWeaponSlot>().UpdateSlot(team.TeamWeapons[i]);
+        }
+    }
+
+    public void InitFromCurrentTeam()
+    {
+        Team team = GameManager.instance.teams[GameManager.instance.roundHandler.CurrentActiveTeam];
+        int size = Mathf.Min(team.TeamWeapons.Length, 12);
+        for (int i = 0; i < size; i++)
         {
             transform.GetChild(0).GetChild(i).GetComponent<UIWeaponSlot>().UpdateSlot(team.TeamWeapons[i]);
         }

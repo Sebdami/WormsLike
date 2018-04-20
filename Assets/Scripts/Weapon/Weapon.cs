@@ -46,6 +46,7 @@ public class Weapon : MonoBehaviour {
         currentRoundUsesLeft--;
         if(!weaponData.InfiniteAmmo)
             weaponData.CurrentAmmo--;
+        GameManager.instance.inventory.InitFromCurrentTeam();
     }
 
     public void ResetUses()

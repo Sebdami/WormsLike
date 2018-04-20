@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour {
     public bool suddenDeath = false;
 
     public Sprite EmptySlotSprite;
+
+    public UIInventory inventory;
+
     public WeaponDatabase WeaponDb
     {
         get
@@ -73,6 +76,7 @@ public class GameManager : MonoBehaviour {
         water = FindObjectOfType<Water>();
         spawnpoints = FindObjectOfType<SpawnPoints>();
         roundHandler = FindObjectOfType<RoundHandler>();
+        inventory = FindObjectOfType<UIInventory>();
 	}
 
     private void Start()
@@ -99,6 +103,7 @@ public class GameManager : MonoBehaviour {
     {
         if(!suddenDeath)
             gameTimer -= Time.deltaTime;
+
         if(gameTimer <= 0 && !suddenDeath)
         {
             gameTimer = 0.0f;

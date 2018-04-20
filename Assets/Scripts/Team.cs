@@ -97,4 +97,9 @@ public class Team {
                 deadCharacters++;
         return deadCharacters == characters.Length;
     }
+
+    public void AddWeaponAmmo(int weaponIndex, int amount)
+    {
+        teamWeapons[weaponIndex].CurrentAmmo += amount;
+    }
 }
