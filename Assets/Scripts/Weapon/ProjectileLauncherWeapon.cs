@@ -94,7 +94,7 @@ public class ProjectileLauncherWeapon : Weapon {
 
             GameObject projectile = Instantiate(ProjectilePrefab, transform.GetChild(1).position, transform.GetChild(1).rotation);
             StartCoroutine(DisableCollisionsForSeconds(GetComponentInParent<WormController>().GetComponentsInChildren<Collider>(), projectile.GetComponent<Collider>(), 0.5f));
-            projectile.GetComponent<ExplosiveProjectile>().Launch(projectile.transform.forward, Mathf.Lerp(minLaunchPower, maxLaunchPower, currentLaunchTimer / launchMaxTime));
+            projectile.GetComponent<Projectile>().Launch(projectile.transform.forward, Mathf.Lerp(minLaunchPower, maxLaunchPower, currentLaunchTimer / launchMaxTime));
             isShooting = false;
             uiPowerBar.UpdateFillValue(0.0f);
             uiPowerBar.gameObject.SetActive(false);

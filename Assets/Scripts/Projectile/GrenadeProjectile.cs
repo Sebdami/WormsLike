@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BazookaProjectile : ExplosiveProjectile {
+public class GrenadeProjectile : TimedExplosiveProjectile {
 
     private new void Start()
     {
@@ -10,14 +10,11 @@ public class BazookaProjectile : ExplosiveProjectile {
         Destroy(gameObject, 10.0f);
     }
 
-    protected void FixedUpdate()
+    public override void Launch(Vector3 direction, float force)
     {
-        if (!isActive)
-            return;
-        if (rb.velocity.magnitude > 0.1f)
-        {
-            transform.LookAt(transform.position + rb.velocity);
-        }
+        base.Launch(direction, force);
+        rb.AddForce(Vector3.up * 2.0f);
+        GetComponent<Rigidbody>().AddTorque(Vector3.forward * force * 2.0f);
     }
 
     public override void Explode()

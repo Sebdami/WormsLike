@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour {
         }
 
         LevelCanvas = Instantiate(levelCanvasPrefab);
-        teams = teamsManagerPrefab.GetComponent<TeamsManager>().GetInitializedTeams();
+        teams = teamsManagerPrefab.GetComponent<TeamsDatabase>().GetInitializedTeams();
         for(int i = 0; i < teams.Length; i++)
         {
             teams[i].TeamWeapons = WeaponDb.GetWeapons();

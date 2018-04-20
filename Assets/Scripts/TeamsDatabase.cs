@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamsManager : MonoBehaviour {
+public class TeamsDatabase : MonoBehaviour {
     [SerializeField]
     Team[] teams;
     // Return a usable copy from the values set in the inspector

@@ -4,23 +4,14 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour {
     protected Rigidbody rb;
-    public bool isActive = true;
+    public bool isActive = false;
 	protected void Start () {
         rb = GetComponent<Rigidbody>();
         if (!rb)
             rb = gameObject.AddComponent<Rigidbody>();
 	}
 
-    protected void FixedUpdate () {
-        if (!isActive)
-            return;
-		if(rb.velocity.magnitude > 0.1f)
-        {
-            transform.LookAt(transform.position + rb.velocity);
-        }
-	}
-
-    public void Launch(Vector3 direction, float force)
+    public virtual void Launch(Vector3 direction, float force)
     {
         if(!rb)
         {
@@ -30,5 +21,6 @@ public class Projectile : MonoBehaviour {
         }
         direction.Normalize();
         rb.AddForce(direction * force, ForceMode.Impulse);
+        isActive = true;
     }
 }
