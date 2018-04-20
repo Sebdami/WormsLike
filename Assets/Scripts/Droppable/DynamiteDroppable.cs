@@ -34,7 +34,6 @@ public class DynamiteDroppable : ExplosiveDroppable {
         GetComponent<Collider>().enabled = false;
         Destroy(GetComponent<Collider>());
         Destroy(GetComponent<Rigidbody>());
-        Destroy(Instantiate(explosion.particleSystem.gameObject, transform.position, Quaternion.identity), 2.0f);
     }
 
     public override void Drop()

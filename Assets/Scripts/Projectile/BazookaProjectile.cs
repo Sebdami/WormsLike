@@ -21,6 +21,5 @@ public class BazookaProjectile : ExplosiveProjectile {
         Destroy(GetComponent<Collider>());
         Destroy(GetComponent<ConstantForce>());
         Destroy(GetComponent<Rigidbody>());
-        Destroy(Instantiate(explosion.particleSystem, transform.position, Quaternion.identity), 2.0f);
     }
 }

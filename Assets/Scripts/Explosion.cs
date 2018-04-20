@@ -26,5 +26,6 @@ public class Explosion
             // Apply damage with falloff
             col.GetComponent<CharacterInstance>().CurrentHp -= (int)(Mathf.Lerp(minDamage, maxDamage,damageFallOffMultiplier));
         }
+        GameObject.Destroy(GameObject.Instantiate(particleSystem, position, Quaternion.identity), 3.0f);
     }
 }
