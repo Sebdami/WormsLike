@@ -54,10 +54,17 @@ public class CharacterInstance : MonoBehaviour {
         set
         {
             if (currentWeapon != null)
+            {
                 currentWeapon.OnWeaponEndUse -= UpdateOwnWeaponAfterUse;
+            }
             currentWeapon = value;
             if (currentWeapon != null)
                 currentWeapon.OnWeaponEndUse += UpdateOwnWeaponAfterUse;
+            else
+            {
+                while (WeaponSocket.transform.childCount > 0)
+                    DestroyImmediate(WeaponSocket.transform.GetChild(0).gameObject);
+            }
         }
     }
 
@@ -99,6 +106,11 @@ public class CharacterInstance : MonoBehaviour {
                 if (value != null && currentWeapon == null)
                 {
                     InstantiateWeapon(value);
+                }
+                else if(value == null && currentWeapon != null)
+                {
+                    while (WeaponSocket.transform.childCount > 0)
+                        DestroyImmediate(WeaponSocket.transform.GetChild(0).gameObject);
                 }
                 return;
             }

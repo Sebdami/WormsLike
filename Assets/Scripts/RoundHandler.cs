@@ -73,7 +73,7 @@ public class RoundHandler : MonoBehaviour {
             hasUsedWeaponOnce = true;
         }
 
-        if(oldState == WormState.WeaponHandled && CurrentActiveCharacter.CurrentWeapon && CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft <= 0)
+        if(oldState == WormState.WeaponHandled && ((CurrentActiveCharacter.CurrentWeapon && CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft <= 0)||(!CurrentActiveCharacter.CurrentWeapon)))
         {
             roundTimer = 5.0f;
         }
@@ -123,7 +123,7 @@ public class RoundHandler : MonoBehaviour {
         {
             currentActiveCharacter = value;
             if (currentActiveCharacter.CurrentWeapon != null)
-                currentActiveCharacter.CurrentWeapon = currentActiveCharacter.CurrentWeapon; // To unequip used up weapons
+                currentActiveCharacter.CurrentWeaponData = currentActiveCharacter.CurrentWeaponData; // To unequip used up weapons
         }
     }
 
