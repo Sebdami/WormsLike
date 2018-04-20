@@ -70,3 +70,9 @@ MonoBehaviour:
       type: 2}
     maxAmmo: 4
     infiniteAmmo: 0
+  - weaponName: HolyHandGrenade
+    weaponImage: {fileID: 21300000, guid: 522b4c4125e8f7b44a8409485f48774a, type: 3}
+    weaponPrefab: {fileID: 1690802262082964, guid: 738d2e7570f8d9b4aa1653474785e107,
+      type: 2}
+    maxAmmo: 1
+    infiniteAmmo: 0
