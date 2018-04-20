@@ -50,7 +50,7 @@ public class UIInventory : MonoBehaviour {
 
     public void WeaponClicked(WeaponData weapon)
     {
-        if (!Rh.hasUsedWeaponOnce && Rh.CurrentActiveCharacter.Controller.CurrentState != WormState.WeaponHandled)
+        if (!Rh.hasUsedWeaponOnce && Rh.CurrentActiveCharacter.Controller.CurrentState != WormState.WeaponHandled && weapon != Rh.CurrentActiveCharacter.CurrentWeaponData)
             Rh.CurrentActiveCharacter.CurrentWeaponData = weapon;
     }
 

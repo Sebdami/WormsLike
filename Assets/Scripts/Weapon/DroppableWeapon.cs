@@ -29,13 +29,16 @@ public class DroppableWeapon : Weapon {
 
     void Drop()
     {
-        GameObject drop = Instantiate(DropPrefab, transform.position, transform.rotation);
+        Vector3 spawnPos = transform.position;
+        spawnPos.z = 1;
+        GameObject drop = Instantiate(DropPrefab, spawnPos, transform.rotation);
         drop.GetComponent<Droppable>().Drop();
 
         ownerController.CurrentState = WormState.WeaponHandled;
         DecreaseAmmo();
         if (OnWeaponEndUse != null)
             OnWeaponEndUse();
+        ownerController.GetComponent<CharacterInstance>().CurrentWeapon = null;
     }
 
     

@@ -53,7 +53,11 @@ public class CharacterInstance : MonoBehaviour {
 
         set
         {
+            if (currentWeapon != null)
+                currentWeapon.OnWeaponEndUse -= UpdateOwnWeaponAfterUse;
             currentWeapon = value;
+            if (currentWeapon != null)
+                currentWeapon.OnWeaponEndUse += UpdateOwnWeaponAfterUse;
         }
     }
 
@@ -83,8 +87,19 @@ public class CharacterInstance : MonoBehaviour {
         {
             if(currentWeaponData == value)
             {
-                if (OnWeaponChanged != null)
-                    OnWeaponChanged(currentWeaponData);
+                if (currentWeaponData != null && !currentWeaponData.InfiniteAmmo && currentWeaponData.CurrentAmmo <= 0)
+                {
+                    CurrentWeaponData = null;
+                }
+                else
+                {
+                    if (OnWeaponChanged != null)
+                        OnWeaponChanged(currentWeaponData);
+                }
+                if (value != null && currentWeapon == null)
+                {
+                    InstantiateWeapon(value);
+                }
                 return;
             }
 
@@ -92,25 +107,48 @@ public class CharacterInstance : MonoBehaviour {
                 DestroyImmediate(WeaponSocket.transform.GetChild(0).gameObject);
 
             currentWeaponData = value;
-            Weapon toApply = Instantiate(currentWeaponData.WeaponPrefab, WeaponSocket.transform).GetComponent<Weapon>();
-            toApply.transform.localPosition = Vector3.zero;
-            toApply.transform.localRotation = Quaternion.identity;
-            CurrentWeapon = toApply;
-            CurrentWeapon.weaponData = currentWeaponData;
+            if(currentWeaponData != null)
+            {
+                InstantiateWeapon(currentWeaponData);
+            }
+            else
+            {
+                CurrentWeapon = null;
+            }
+            
             if (OnWeaponChanged != null)
                 OnWeaponChanged(currentWeaponData);
         }
+    }
+
+    void InstantiateWeapon(WeaponData weapon)
+    {
+        if (weapon == null)
+            return;
+        Weapon toApply = Instantiate(weapon.WeaponPrefab, WeaponSocket.transform).GetComponent<Weapon>();
+        toApply.transform.localPosition = Vector3.zero;
+        toApply.transform.localRotation = Quaternion.identity;
+        CurrentWeapon = toApply;
+        CurrentWeapon.weaponData = weapon;
+    }
+
+    void UpdateOwnWeaponAfterUse()
+    {
+        CurrentWeaponData = currentWeaponData;
     }
 
     public void Select()
     {
         characterInfo.GetComponent<UICharacterInfo>().ToggleActiveMarker();
         characterInfo.transform.SetAsLastSibling();
+        CurrentWeaponData = currentWeaponData;
     }
 
     public void Deselect()
     {
         characterInfo.GetComponent<UICharacterInfo>().ToggleActiveMarker();
+        if(CurrentWeapon)
+            Destroy(CurrentWeapon.gameObject);
     }
 
     private void OnDestroy()

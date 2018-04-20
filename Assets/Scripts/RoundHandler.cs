@@ -59,7 +59,8 @@ public class RoundHandler : MonoBehaviour {
         // Disable weapon if current character gets hit
         if(newState == WormState.Hit)
         {
-            CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft = 0;
+            if(CurrentActiveCharacter.CurrentWeapon)
+                CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft = 0;
             hasBeenHit = true;
         }
         if(newState == WormState.Dead)
@@ -72,7 +73,7 @@ public class RoundHandler : MonoBehaviour {
             hasUsedWeaponOnce = true;
         }
 
-        if(oldState == WormState.WeaponHandled && CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft <= 0)
+        if(oldState == WormState.WeaponHandled && CurrentActiveCharacter.CurrentWeapon && CurrentActiveCharacter.CurrentWeapon.currentRoundUsesLeft <= 0)
         {
             roundTimer = 5.0f;
         }
@@ -121,6 +122,8 @@ public class RoundHandler : MonoBehaviour {
         set
         {
             currentActiveCharacter = value;
+            if (currentActiveCharacter.CurrentWeapon != null)
+                currentActiveCharacter.CurrentWeapon = currentActiveCharacter.CurrentWeapon; // To unequip used up weapons
         }
     }
 
@@ -195,9 +198,11 @@ public class RoundHandler : MonoBehaviour {
         hasBeenHit = false;
         CurrentActiveTeam = (CurrentActiveTeam + 1) % teamAmount;
         currentActivePlayerIndex = lastActivePlayerForTeam[CurrentActiveTeam];
-        //Reset Weapon use for everyone
-        if(CurrentActiveCharacter.CurrentWeapon)
+        //Reset Weapon use
+        if (CurrentActiveCharacter.CurrentWeapon)
+        {
             CurrentActiveCharacter.CurrentWeapon.ResetUses();
+        }
         SwitchPlayer();
         roundTimer = roundMaxTimer;
         ChangeWind();

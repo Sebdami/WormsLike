@@ -588,7 +588,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4320712828824160, guid: bb464f7edc663724d82423df336d9752, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.61
+      value: 0.28
       objectReference: {fileID: 0}
     - target: {fileID: 4320712828824160, guid: bb464f7edc663724d82423df336d9752, type: 2}
       propertyPath: m_LocalPosition.z
@@ -908,6 +908,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   slope: 0.2
+  spikesFrequency: 0.5
 --- !u!114 &1365905087
 MonoBehaviour:
   m_ObjectHideFlags: 0

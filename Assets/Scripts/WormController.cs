@@ -97,7 +97,18 @@ public class WormController : MonoBehaviour {
         character.characterData.OnDeath += Die;
         Rb = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+        OnStateChange += HandleHitToMovementChange;
+    }
 
+    void HandleHitToMovementChange(WormState oldState, WormState newState)
+    {
+        if(oldState == WormState.Hit)
+        {
+            if(newState == WormState.Movement || newState == WormState.Paused)
+            {
+                transform.position += Vector3.up * 0.5f;
+            }
+        }
     }
 
     void Die()
@@ -253,7 +264,7 @@ public class WormController : MonoBehaviour {
         {
             float inputHorizontal = Input.GetAxisRaw("Horizontal");
             if(!Input.GetKey(KeyCode.LeftShift))
-                Rb.AddForce(Vector3.right * inputHorizontal * moveSpeed);
+                Rb.AddForce(Vector3.right * inputHorizontal * moveSpeed + Vector3.up);
             if (Mathf.Abs(inputHorizontal) > 0.1f)
             {
                 transform.eulerAngles = Vector3.up * (inputHorizontal > 0.0f ? 90f : -90f);

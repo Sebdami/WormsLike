@@ -295,7 +295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion:
     ExplosionRadius: 7
-    ExplosionForce: 14
+    ExplosionForce: 18
     maxDamage: 75
     minDamage: 10
     DamageFalloff:

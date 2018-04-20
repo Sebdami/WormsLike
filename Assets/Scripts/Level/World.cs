@@ -19,6 +19,8 @@ public class World : MonoBehaviour
     public AnimationCurve depthHeightModifier = new AnimationCurve(new Keyframe(0.0f, 0.0f, 1.0f, 1.0f), new Keyframe(0.5f, 1.0f, 0f, 0f), new Keyframe(1.0f, 0.0f, -1f, -1f));
     public float slope = 3.0f;
 
+    public float spikesFrequency = 0.5f;
+
     void Start ()
 	{
 		data = new byte[worldX, worldY, worldZ];
@@ -73,9 +75,9 @@ public class World : MonoBehaviour
 		}
 	}
   
-	int PerlinNoise (int x, int y, int z, float scale, float height, float power)
+	int PerlinNoise (int _x, int y, int z, float scale, float height, float power)
 	{
-        x /= 2;
+        float x = (float)_x *spikesFrequency;
         return (int)(Mathf.Pow((Mathf.PerlinNoise(x / scale, y / scale) * (height)), (2))); //+z / 40.0f
 
     }
